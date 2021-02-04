@@ -22,8 +22,6 @@ class StudentPaymentController extends Controller
 
     }
 
-
-
     public function store(Request $request)
     {
         $requestBody = $request->all();
@@ -35,10 +33,6 @@ class StudentPaymentController extends Controller
     {
 
     }
-
-
-
-
 
     public function update(Request $request, Student_Payment $student_Payment)
     {
