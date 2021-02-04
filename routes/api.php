@@ -86,6 +86,8 @@ Route::get('payment/test2', 'Payment\PaymentStudentController@findPayed');
 
 Route::get('lecture/{lectureId}/students', 'Lecture\LectureController@getAllStudentsByLecture');
 
+Route::post('students/lecture/add', 'Student\StudentController@addLecture');
+
 Route::get('payment/student/{studentId}', 'Payment\PaymentStudentController@getPaymentsOfStudent');
 
 Route::get('views/children/all', 'View\ViewController@menu');

@@ -30,6 +30,11 @@ class StudentController extends ApiController
         return $this->serviceGateway->studentService->createStudent($requestBody);
     }
 
+    public function addLecture(Request  $request){
+        $requestBody = $request->all();
+        return $this->serviceGateway->studentService->addLecture($requestBody);
+    }
+
     public function getStudentLectures($studentId){
         return $this->serviceGateway->studentService->findStudentLectures($studentId);
     }
