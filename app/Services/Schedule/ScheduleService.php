@@ -4,7 +4,6 @@ namespace App\Services\Schedule;
 use App\DailySchedule;
 use App\Schedule;
 use App\Services\Service;
-use DateTime;
 use Illuminate\Support\Facades\DB;
 
 class ScheduleService extends Service
