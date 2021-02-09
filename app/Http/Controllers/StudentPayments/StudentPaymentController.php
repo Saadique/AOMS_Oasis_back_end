@@ -28,20 +28,21 @@ class StudentPaymentController extends Controller
         return $this->serviceGateway->studentPaymentsService->storeStudentPayments($requestBody);
     }
 
-
-    public function show(Student_Payment $student_Payment)
-    {
-
-    }
-
-    public function update(Request $request, Student_Payment $student_Payment)
-    {
-
+    public function getPaymentsOfStudent($studentId){
+        return $this->serviceGateway->studentPaymentsService->findPaymentsOfStudent($studentId);
     }
 
 
-    public function destroy(Student_Payment $student_Payment)
-    {
+    public function show(Student_Payment $student_Payment){
+
+    }
+
+    public function update(Request $request, Student_Payment $student_Payment){
+
+    }
+
+
+    public function destroy(Student_Payment $student_Payment){
 
     }
 }

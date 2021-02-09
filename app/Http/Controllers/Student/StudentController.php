@@ -24,8 +24,7 @@ class StudentController extends ApiController
         return $students;
     }
 
-    public function store(StudentStoreRequest $request)
-    {
+    public function store(StudentStoreRequest $request){
         $requestBody = $request->all();
         return $this->serviceGateway->studentService->createStudent($requestBody);
     }

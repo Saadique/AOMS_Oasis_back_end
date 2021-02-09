@@ -16,7 +16,7 @@ class CreateMonthlyPaymentsTable extends Migration
         Schema::create('monthly_payments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('student_payment_id')->nullable();
-            $table->unsignedBigInteger('student_id')->nullable();
+            $table->unsignedInteger('student_id')->nullable();
             $table->date('due_date')->nullable();
             $table->double('amount')->nullable();
             $table->string('month')->nullable();

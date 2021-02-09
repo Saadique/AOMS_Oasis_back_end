@@ -98,6 +98,9 @@ Route::get('courses/type/{courseType}', 'Course\CourseController@getCourseByType
 
 Route::post('payment-schemes/find/relevant', 'Payment_Scheme\PaymentSchemeController@getRelevantScheme');
 Route::post('payment-schemes/student/lecture', 'StudentSchemeLecture\StudentSchemeLectureController@getRelevantScheme');
+Route::get('monthly-payment/student-payment/{studentPaymentId}', 'StudentPayments\MonthlyPaymentController@getMonthlyPayments');
+
+Route::get('student-payment/student/{studentId}', 'StudentPayments\StudentPaymentController@getPaymentsOfStudent');
 
 //Route::get('teacher/lectures/{teacherId}', 'Teacher\TeacherController@getAllLecturesOfTeacher');
 Route::get('student/lectures/{studentId}', 'Student\StudentController@getStudentLectures');

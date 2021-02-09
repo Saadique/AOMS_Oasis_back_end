@@ -2,82 +2,51 @@
 
 namespace App\Http\Controllers\StudentPayments;
 
+use App\Http\Controllers\Controller;
 use App\MonthlyPayment;
+use App\Services\ServiceGateway;
 use Illuminate\Http\Request;
 
 class MonthlyPaymentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    private $serviceGateway;
+
+    public function __construct(ServiceGateway $serviceGateway)
     {
-        //
+        $this->serviceGateway = $serviceGateway;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function index() {
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\MonthlyPayment  $monthlyPayment
-     * @return \Illuminate\Http\Response
-     */
+    public function getMonthlyPayments($studentPaymentId){
+        return $this->serviceGateway->studentPaymentsService->findMonthlyPayments($studentPaymentId);
+    }
+
     public function show(MonthlyPayment $monthlyPayment)
     {
-        //
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\MonthlyPayment  $monthlyPayment
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(MonthlyPayment $monthlyPayment)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\MonthlyPayment  $monthlyPayment
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, MonthlyPayment $monthlyPayment)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\MonthlyPayment  $monthlyPayment
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(MonthlyPayment $monthlyPayment)
     {
         //

@@ -3,6 +3,7 @@ namespace App\Services\StudentPayments;
 
 use App\MonthlyPayment;
 use App\Services\Service;
+use App\Student;
 use App\Student_Payment;
 
 class StudentPaymentsService extends Service
@@ -20,6 +21,7 @@ class StudentPaymentsService extends Service
                 $year = date("Y",$start_date_totime);
                 $monthlyPayment = new MonthlyPayment();
                 $monthlyPayment->student_payment_id = $studentPayment->id;
+                $monthlyPayment->student_id = $studentPayment->student_id;
                 $monthlyPayment->amount = $studentPayment->amount;
                 $monthlyPayment->month = $month;
                 $monthlyPayment->year = $year;
@@ -32,4 +34,18 @@ class StudentPaymentsService extends Service
         }
         return $studentPayment;
     }
+
+    public function findMonthlyPayments($studentPaymentId) {
+        $activeMonthlyPayments = MonthlyPayment::where([
+            ['student_payment_id', $studentPaymentId],
+            ['status', 'active']
+        ])->get();
+        return $activeMonthlyPayments;
+    }
+
+    public function findPaymentsOfStudent($studentId) {
+        $student = Student::findOrFail($studentId);
+        return $student->studentPayments;
+    }
+
 }
