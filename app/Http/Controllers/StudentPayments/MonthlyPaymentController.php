@@ -29,21 +29,11 @@ class MonthlyPaymentController extends Controller
         return $this->serviceGateway->studentPaymentsService->findMonthlyPayments($studentPaymentId);
     }
 
-    public function show(MonthlyPayment $monthlyPayment)
-    {
-
-    }
-
-
-    public function edit(MonthlyPayment $monthlyPayment)
-    {
-        //
-    }
-
-
     public function update(Request $request, MonthlyPayment $monthlyPayment)
     {
-        //
+        $requestBody = $request->all();
+        $result = $this->serviceGateway->studentPaymentsService->updatePayedStatus($requestBody, $monthlyPayment);
+        return response()->json($result,200);
     }
 
 

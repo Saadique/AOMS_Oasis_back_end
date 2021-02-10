@@ -61,6 +61,8 @@ Route::resource('registrations', 'Registration\RegistrationController', ['except
 Route::resource('payment-schemes', 'Payment_Scheme\PaymentSchemeController', ['except' => ['create', 'edit']]);
 Route::resource('student-payments', 'StudentPayments\StudentPaymentController', ['except' => ['create', 'edit']]);
 Route::resource('student-scheme-lecture', 'StudentSchemeLecture\StudentSchemeLectureController', ['except' => ['create', 'edit']]);
+Route::resource('monthly-payments', 'StudentPayments\MonthlyPaymentController', ['except' => ['create', 'edit']]);
+
 
 Route::get('daily-schedules/date/{date}', 'DailySchedule\DailyScheduleController@showByDate');
 Route::get('daily-schedules/date/student/{date}/{studentId}', 'DailySchedule\DailyScheduleController@getStudentScheduleByDate');

@@ -5,6 +5,7 @@ use App\MonthlyPayment;
 use App\Services\Service;
 use App\Student;
 use App\Student_Payment;
+use Illuminate\Support\Carbon;
 
 class StudentPaymentsService extends Service
 {
@@ -46,6 +47,14 @@ class StudentPaymentsService extends Service
     public function findPaymentsOfStudent($studentId) {
         $student = Student::findOrFail($studentId);
         return $student->studentPayments;
+    }
+
+    public function updatePayedStatus($requestBody, MonthlyPayment $monthlyPayment) {
+        $monthlyPayment->status = $requestBody['status'];
+        $formattedDate = Carbon::parse($requestBody['payment_date'])->format('Y-m-d');
+        $monthlyPayment->payment_date = $formattedDate;
+        $monthlyPayment->save();
+        return $monthlyPayment;
     }
 
 }
