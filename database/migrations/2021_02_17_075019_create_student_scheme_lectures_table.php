@@ -6,11 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateStudentSchemeLecturesTable extends Migration
 {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
         Schema::create('student_scheme_lectures', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('student_id')->nullable();
+            $table->unsignedBigInteger('student_payment_id')->nullable();
             $table->unsignedInteger('payment_scheme_id')->nullable();
             $table->unsignedInteger('lecture_id')->nullable();
 
@@ -18,6 +24,11 @@ class CreateStudentSchemeLecturesTable extends Migration
             $table->foreign('student_id')
                 ->references('id')
                 ->on('students')
+                ->onDelete('cascade');
+
+            $table->foreign('student_payment_id')
+                ->references('id')
+                ->on('student__payments')
                 ->onDelete('cascade');
 
             $table->foreign('payment_scheme_id')

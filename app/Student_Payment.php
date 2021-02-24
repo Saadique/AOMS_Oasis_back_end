@@ -13,4 +13,13 @@ class Student_Payment extends Model
         return $this->hasMany(MonthlyPayment::class);
     }
 
+    public function payment() {
+        return $this->belongsTo(Payment::class);
+    }
+
+    public function paymentScheme() {
+        return $this->belongsTo(Payment_Scheme::class);
+    }
+
+
 }

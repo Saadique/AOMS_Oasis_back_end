@@ -36,6 +36,10 @@ class MonthlyPaymentController extends Controller
         return response()->json($result,200);
     }
 
+    public function test(){
+        return $this->serviceGateway->studentPaymentsService->changeStatusInDue();
+    }
+
 
     public function destroy(MonthlyPayment $monthlyPayment)
     {

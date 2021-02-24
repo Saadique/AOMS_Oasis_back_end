@@ -106,3 +106,5 @@ Route::get('student-payment/student/{studentId}', 'StudentPayments\StudentPaymen
 
 //Route::get('teacher/lectures/{teacherId}', 'Teacher\TeacherController@getAllLecturesOfTeacher');
 Route::get('student/lectures/{studentId}', 'Student\StudentController@getStudentLectures');
+
+Route::get('test/due', 'StudentPayments\MonthlyPaymentController@test');

@@ -1,21 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\StudentSchemeLecture;
+namespace App\Http\Controllers\StudentPayments;
 
 use App\Http\Controllers\Controller;
-use App\Services\ServiceGateway;
-use App\StudentSchemeLecture;
+use App\TeacherInstituteShare;
 use Illuminate\Http\Request;
 
-class StudentSchemeLectureController extends Controller
+class TeacherInstituteShareController extends Controller
 {
-    private $serviceGateway;
-
-    public function __construct(ServiceGateway $serviceGateway)
-    {
-        $this->serviceGateway = $serviceGateway;
-    }
-
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         //
@@ -39,17 +36,16 @@ class StudentSchemeLectureController extends Controller
      */
     public function store(Request $request)
     {
-        $studentSchemeLecture = $request->all();
-        $this->serviceGateway->studentSchemeLectureService->storeStudentSchemeLecture($studentSchemeLecture);
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\StudentSchemeLecture  $studentSchemeLecture
+     * @param  \App\TeacherInstituteShare  $teacherInstituteShare
      * @return \Illuminate\Http\Response
      */
-    public function show(StudentSchemeLecture $studentSchemeLecture)
+    public function show(TeacherInstituteShare $teacherInstituteShare)
     {
         //
     }
@@ -57,10 +53,10 @@ class StudentSchemeLectureController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\StudentSchemeLecture  $studentSchemeLecture
+     * @param  \App\TeacherInstituteShare  $teacherInstituteShare
      * @return \Illuminate\Http\Response
      */
-    public function edit(StudentSchemeLecture $studentSchemeLecture)
+    public function edit(TeacherInstituteShare $teacherInstituteShare)
     {
         //
     }
@@ -69,10 +65,10 @@ class StudentSchemeLectureController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\StudentSchemeLecture  $studentSchemeLecture
+     * @param  \App\TeacherInstituteShare  $teacherInstituteShare
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, StudentSchemeLecture $studentSchemeLecture)
+    public function update(Request $request, TeacherInstituteShare $teacherInstituteShare)
     {
         //
     }
@@ -80,10 +76,10 @@ class StudentSchemeLectureController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\StudentSchemeLecture  $studentSchemeLecture
+     * @param  \App\TeacherInstituteShare  $teacherInstituteShare
      * @return \Illuminate\Http\Response
      */
-    public function destroy(StudentSchemeLecture $studentSchemeLecture)
+    public function destroy(TeacherInstituteShare $teacherInstituteShare)
     {
         //
     }

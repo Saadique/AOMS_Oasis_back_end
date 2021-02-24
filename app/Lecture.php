@@ -30,7 +30,7 @@ class Lecture extends Model
     }
 
     public function payment() {
-        return $this->hasOne(Lecture::class);
+        return $this->hasOne(Payment::class);
     }
 
     public function courseMedium() {
