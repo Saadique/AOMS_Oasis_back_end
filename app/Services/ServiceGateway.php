@@ -3,6 +3,7 @@
 
 namespace App\Services;
 use App\Services\Auth\LoginService;
+use App\Services\Auth\RegisterService;
 use App\Services\Course\CourseService;
 use App\Services\CourseMedium\CourseMediumService;
 use App\Services\DailySchedule\DailyScheduleService;
@@ -37,6 +38,7 @@ class ServiceGateway
     public $studentPaymentsService;
     public $studentSchemeLectureService;
     public $roomService;
+    public $registerService;
 
     public function __construct(
         CourseService               $courseService,
@@ -54,7 +56,8 @@ class ServiceGateway
         PaymentSchemeService        $paymentSchemeService,
         StudentPaymentsService      $studentPaymentsService,
         StudentSchemeLectureService $studentSchemeLectureService,
-        RoomService                 $roomService)
+        RoomService                 $roomService,
+        RegisterService             $registerService)
     {
         $this->courseService                 = $courseService;
         $this->scheduleService               = $scheduleService;
@@ -72,6 +75,7 @@ class ServiceGateway
         $this->studentPaymentsService        = $studentPaymentsService;
         $this->studentSchemeLectureService   = $studentSchemeLectureService;
         $this->roomService                   = $roomService;
+        $this->registerService               = $registerService;
     }
 
 }

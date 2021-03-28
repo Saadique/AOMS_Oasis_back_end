@@ -28,21 +28,21 @@ class LoginService extends AuthService
                     'userViews'    => $authorizedViews
                 ];
                 switch ($user->role_id){
+//                    case 1:
+//                        $response["admin"] = Admin::where('user_id', $user->id)->first();
+//                        break;
                     case 1:
-                        $response["admin"] = Admin::where('user_id', $user->id)->first();
-                        break;
-                    case 2:
                         $response["teacher"] = Teacher::where('user_id', $user->id)->first();
                         break;
-                    case 3:
+                    case 2:
                         $response["student"] = Student::where('user_id', $user->id)->first();
                         break;
-                    case 4:
-                        $response["frontOfficeStaff"] = FrontOfficeStaff::where('user_id', $user->id)->first();
-                        break;
-                    case 5:
-                        $response["manager"] = Manager::where('user_id', $user->id)->first();
-                        break;
+//                    case 4:
+//                        $response["frontOfficeStaff"] = FrontOfficeStaff::where('user_id', $user->id)->first();
+//                        break;
+//                    case 5:
+//                        $response["manager"] = Manager::where('user_id', $user->id)->first();
+//                        break;
                 }
 
                 return response($response, 200);

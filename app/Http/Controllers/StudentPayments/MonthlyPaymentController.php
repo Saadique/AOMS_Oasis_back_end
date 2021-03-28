@@ -29,6 +29,14 @@ class MonthlyPaymentController extends Controller
         return $this->serviceGateway->studentPaymentsService->findMonthlyPayments($studentPaymentId);
     }
 
+    public function getMonthlyPaidPayments($studentPaymentId){
+        return $this->serviceGateway->studentPaymentsService->findPaidPayments($studentPaymentId);
+    }
+
+    public function getMonthlyDuePayments($studentPaymentId){
+        return $this->serviceGateway->studentPaymentsService->findDuePayments($studentPaymentId);
+    }
+
     public function update(Request $request, MonthlyPayment $monthlyPayment)
     {
         $requestBody = $request->all();

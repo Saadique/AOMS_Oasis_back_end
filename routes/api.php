@@ -40,8 +40,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 Route::middleware('auth:api')->group(function () {
     Route::post('user/logout', 'User\UserController@logout')->name('logout.api');
     Route::post('user/details', 'User\UserController@details');
-    Route::get('teacher/lectures/{teacherId}', 'Teacher\TeacherController@getAllLecturesOfTeacher')
-        ->middleware('api.admin');
+//    Route::get('teacher/lectures/{teacherId}', 'Teacher\TeacherController@getAllLecturesOfTeacher')
+//        ->middleware('api.admin');
 });
 
 Route::resource('courses', 'Course\CourseController', ['except' => ['create', 'edit']]);
@@ -100,11 +100,21 @@ Route::get('courses/type/{courseType}', 'Course\CourseController@getCourseByType
 
 Route::post('payment-schemes/find/relevant', 'Payment_Scheme\PaymentSchemeController@getRelevantScheme');
 Route::post('payment-schemes/student/lecture', 'StudentSchemeLecture\StudentSchemeLectureController@getRelevantScheme');
-Route::get('monthly-payment/student-payment/{studentPaymentId}', 'StudentPayments\MonthlyPaymentController@getMonthlyPayments');
+
+Route::get('monthly-payment/student-payment/payable/{studentPaymentId}', 'StudentPayments\MonthlyPaymentController@getMonthlyPayments');
+Route::get('monthly-payment/student-payment/paid/{studentPaymentId}', 'StudentPayments\MonthlyPaymentController@getMonthlyPaidPayments');
+Route::get('monthly-payment/student-payment/due/{studentPaymentId}', 'StudentPayments\MonthlyPaymentController@getMonthlyDuePayments');
 
 Route::get('student-payment/student/{studentId}', 'StudentPayments\StudentPaymentController@getPaymentsOfStudent');
+Route::get('student-payment-all/student/{studentId}', 'StudentPayments\StudentPaymentController@getAllStudentPayments');
 
-//Route::get('teacher/lectures/{teacherId}', 'Teacher\TeacherController@getAllLecturesOfTeacher');
+
+Route::get('teacher/lectures/{teacherId}', 'Teacher\TeacherController@getAllLecturesOfTeacher');
+
+//teacher monthly income for lecture
+Route::get('teacher/lecture/month/remuneration/{teacherId}/{lectureId}/{month}', 'Teacher\TeacherController@getMonthlyLecRemuneration');
+
+
 Route::get('student/lectures/{studentId}', 'Student\StudentController@getStudentLectures');
 
 Route::get('test/due', 'StudentPayments\MonthlyPaymentController@test');

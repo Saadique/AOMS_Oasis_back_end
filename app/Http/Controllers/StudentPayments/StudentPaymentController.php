@@ -32,6 +32,9 @@ class StudentPaymentController extends Controller
         return $this->serviceGateway->studentPaymentsService->findPaymentsOfStudent($studentId);
     }
 
+    public function getAllStudentPayments($studentId){
+        return $this->serviceGateway->studentPaymentsService->findAllPaymentsOfStudents($studentId);
+    }
 
     public function show(Student_Payment $student_Payment){
 

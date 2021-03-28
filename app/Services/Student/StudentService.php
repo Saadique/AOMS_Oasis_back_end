@@ -5,7 +5,10 @@ namespace App\Services\Student;
 use App\Services\Registration\RegistrationService;
 use App\Services\Service;
 use App\Student;
+use App\User;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class StudentService extends Service
 {
@@ -17,9 +20,25 @@ class StudentService extends Service
     }
 
     public function createStudent($requestBody) {
+        $registerData = [
+            'username'  => $requestBody['email'],
+            'role_id'   => 2,
+            'role_name' => 'Student',
+            'password'  => 12345,
+            'password_confirmation' => 12345
+        ];
+
+        $registerData['password'] = Hash::make($registerData['password']);
+        $registerData['remember_token'] = Str::random(10);
+
+        $user = User::create($registerData);
+        $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+        $requestBody['user_id'] = $user->id;
+
         $student = Student::create($requestBody);
         $student->lectures()->attach($requestBody['lectures']);
         $this->registrationService->createRegistration($student,$requestBody);
+
         return $this->showOne($student);
     }
 

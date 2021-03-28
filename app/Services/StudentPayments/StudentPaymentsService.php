@@ -1,18 +1,38 @@
 <?php
 namespace App\Services\StudentPayments;
 
+use App\Lecture;
 use App\MonthlyPayment;
+use App\PaymentLecAssociation;
 use App\Services\Service;
 use App\Student;
 use App\Student_Payment;
 use App\StudentSchemeLecture;
 use App\TeacherInstituteShare;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class StudentPaymentsService extends Service
 {
     public function storeStudentPayments($requestBody) {
         $studentPayment = Student_Payment::create($requestBody);
+        if ($requestBody['payment_type'] == "normal"){
+            foreach ($requestBody['lecture_ids'] as $lectureId) {
+
+                $lec_stud_assc = DB::table('lecture_student')->where([
+                    ['lecture_id', $lectureId],
+                    ['student_id', $requestBody['student_id']]
+                ])->get()->first();
+
+                $teacher_id = Lecture::findOrFail($lectureId)->teacher->id;
+
+                $lecAssc = new PaymentLecAssociation();
+                $lecAssc->student_payment_id = $studentPayment->id;
+                $lecAssc->lec_student_ass_id = $lec_stud_assc->lecture_student_id;
+                $lecAssc->teacher_id = $teacher_id;
+                $lecAssc->save();
+            }
+        }
         if ($studentPayment) {
             $payment_start_date = $studentPayment->payment_start_date;
             $payment_end_date = $studentPayment->payment_end_date;
@@ -42,11 +62,11 @@ class StudentPaymentsService extends Service
         $activeMonthlyPayments = MonthlyPayment::where([
             ['student_payment_id', $studentPaymentId],
             ['status', 'active']
-        ])->get();
+        ])->take(2)->get();
         return $activeMonthlyPayments;
     }
 
-    public function findPaymentHistory($studentPaymentId) {
+    public function findPaidPayments($studentPaymentId) {
         $activeMonthlyPayments = MonthlyPayment::where([
             ['student_payment_id', $studentPaymentId],
             ['status', 'payed']
@@ -65,6 +85,38 @@ class StudentPaymentsService extends Service
     public function findPaymentsOfStudent($studentId) {
         $student = Student::findOrFail($studentId);
         return $student->studentPayments;
+    }
+
+    public function findAllPaymentsOfStudents($studentId) {
+        $student = Student::findOrFail($studentId);
+        $studentPayments =  $student->studentPayments;
+        $result = [];
+        foreach ($studentPayments as $payment){
+
+            if ($payment->payment_type == "normal"){
+                $obj = [
+                    "name"=>$payment->payment->name,
+                    "student_payment"=>$payment,
+                    "payment"=>$payment->payment
+                ];
+                array_push($result,$obj);
+            }
+
+            if ($payment->payment_type == "scheme"){
+                $lectures = StudentSchemeLecture::where([
+                    ['student_id', $studentId],
+                    ['payment_scheme_id', $payment->payment_scheme_id]])->with('lecture')->get();
+
+                $obj = [
+                    "name"=>$payment->paymentScheme->scheme_name,
+                    "payment"=>$payment->paymentScheme,
+                    "student_payment"=>$payment,
+                    "lectures"=>$lectures
+                ];
+                array_push($result,$obj);
+            }
+        }
+        return $result;
     }
 
     public function updatePayedStatus($requestBody, MonthlyPayment $monthlyPayment) {
@@ -131,5 +183,7 @@ class StudentPaymentsService extends Service
             }
         }
     }
+
+
 
 }
