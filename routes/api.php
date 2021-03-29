@@ -112,7 +112,10 @@ Route::get('student-payment-all/student/{studentId}', 'StudentPayments\StudentPa
 Route::get('teacher/lectures/{teacherId}', 'Teacher\TeacherController@getAllLecturesOfTeacher');
 
 //teacher monthly income for lecture
-Route::get('teacher/lecture/month/remuneration/{teacherId}/{lectureId}/{month}', 'Teacher\TeacherController@getMonthlyLecRemuneration');
+Route::get('teacher/lecture/month/remuneration/{teacherId}/{lectureId}/{year}/{month}', 'Teacher\TeacherController@getMonthlyRemuneration');
+
+//lecture months
+Route::get('teacher/lecture/months/{lectureId}', 'Teacher\TeacherController@getLectureMonths');
 
 
 Route::get('student/lectures/{studentId}', 'Student\StudentController@getStudentLectures');
