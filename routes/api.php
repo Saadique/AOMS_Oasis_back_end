@@ -62,6 +62,7 @@ Route::resource('payment-schemes', 'Payment_Scheme\PaymentSchemeController', ['e
 Route::resource('student-payments', 'StudentPayments\StudentPaymentController', ['except' => ['create', 'edit']]);
 Route::resource('student-scheme-lecture', 'StudentSchemeLecture\StudentSchemeLectureController', ['except' => ['create', 'edit']]);
 Route::resource('monthly-payments', 'StudentPayments\MonthlyPaymentController', ['except' => ['create', 'edit']]);
+Route::resource('attendances', 'Attendance\AttendanceController', ['except' => ['create', 'edit']]);
 
 
 Route::get('daily-schedules/date/{date}', 'DailySchedule\DailyScheduleController@showByDate');
@@ -77,6 +78,9 @@ Route::get('lectures/subjects/{subjectId}', 'Lecture\LectureController@getLectur
 
 Route::get('schedules/lecture/{lectureId}', 'Schedule\ScheduleController@getSchedulesByLecture');
 Route::post('schedules/matching', 'Schedule\ScheduleController@getAllMatchingSchedules');
+
+//get daily-schedules by date and lecture
+Route::get('daily-schedules/date/lecture/{date}/{lectureId}/{studentId}', 'DailySchedule\DailyScheduleController@getScheduleByLectureAndDate');
 
 Route::get('daily_schedules/find', 'Schedule\ScheduleController@findSchedule');
 Route::post('student/payments', 'Payment\PaymentStudentController@store');
@@ -111,8 +115,12 @@ Route::get('student-payment-all/student/{studentId}', 'StudentPayments\StudentPa
 
 Route::get('teacher/lectures/{teacherId}', 'Teacher\TeacherController@getAllLecturesOfTeacher');
 
+//teacher monthly fee status for lecture
+Route::get('teacher/lecture/month/remuneration/{lectureId}/{year}/{month}/all', 'Teacher\TeacherController@getMonthlyRemuneration');
+
 //teacher monthly income for lecture
-Route::get('teacher/lecture/month/remuneration/{teacherId}/{lectureId}/{year}/{month}', 'Teacher\TeacherController@getMonthlyRemuneration');
+Route::get('teacher/lecture/month/remuneration/{teacherId}/{lectureId}/{year}/{month}/paid', 'Teacher\TeacherController@getMonthlyRemunerationPaid');
+
 
 //lecture months
 Route::get('teacher/lecture/months/{lectureId}', 'Teacher\TeacherController@getLectureMonths');

@@ -24,7 +24,8 @@ class AttendanceController extends ApiController
 
     public function store(Request $request)
     {
-
+        $requestBody = $request->all();
+        return $this->serviceGateway->attendanceService->markAttendance($requestBody);
     }
 
     public function show(Attendance $attendance)

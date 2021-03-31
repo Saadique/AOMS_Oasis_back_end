@@ -2,6 +2,7 @@
 
 
 namespace App\Services\DailySchedule;
+use App\Attendance;
 use App\DailySchedule;
 use App\Services\Service;
 use App\Student;
@@ -111,6 +112,30 @@ class DailyScheduleService extends Service
         } else {
             return $this->errorResponse("THIS_TIME_IS_NOT_FREE",400);
         }
+    }
+
+
+    public function findByDateAndLecture($date, $lectureId, $studentId) {
+        $dailySchedules = DailySchedule::where([
+            ['date', $date],
+            ['lecture_id', $lectureId]
+        ])->with('room')->get();
+
+        foreach ($dailySchedules as $dailySchedule) {
+            $dailySchedule->{"attendance"} = null;
+        }
+        foreach ($dailySchedules as $dailySchedule) {
+            $attendance = Attendance::where([
+                ['daily_schedule_id', $dailySchedule->id],
+                ['student_id', $studentId]
+            ])->get()->first();
+
+            if ($attendance) {
+                $dailySchedule->attendance = $attendance->attendance_status;
+            }
+        }
+
+        return $dailySchedules;
     }
 
 }

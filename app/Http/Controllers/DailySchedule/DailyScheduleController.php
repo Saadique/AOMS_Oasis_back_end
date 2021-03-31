@@ -43,6 +43,10 @@ class DailyScheduleController extends ApiController
         return $this->serviceGateway->dailyScheduleService->findByDateAndStudent($date, $studentId);
     }
 
+    public function getScheduleByLectureAndDate($date, $lectureId, $studentId) {
+        return $this->serviceGateway->dailyScheduleService->findByDateAndLecture($date, $lectureId, $studentId);
+    }
+
     public function update(Request $request, DailySchedule $dailySchedule)
     {
         return $this->serviceGateway->dailyScheduleService->updateSchedule($request, $dailySchedule);

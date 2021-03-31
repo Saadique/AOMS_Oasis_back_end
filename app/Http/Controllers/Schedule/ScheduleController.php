@@ -50,6 +50,7 @@ class ScheduleController extends ApiController
         return $this->serviceGateway->scheduleService->getAllSchedulesOfOneLecture($lectureId);
     }
 
+
     public function findSchedule(Request $request) {
 
         $date = $request->input('date');

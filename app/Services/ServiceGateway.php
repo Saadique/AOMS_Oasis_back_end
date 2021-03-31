@@ -2,6 +2,7 @@
 
 
 namespace App\Services;
+use App\Services\Attendance\AttendanceService;
 use App\Services\Auth\LoginService;
 use App\Services\Auth\RegisterService;
 use App\Services\Course\CourseService;
@@ -39,6 +40,8 @@ class ServiceGateway
     public $studentSchemeLectureService;
     public $roomService;
     public $registerService;
+    public $attendanceService;
+
 
     public function __construct(
         CourseService               $courseService,
@@ -57,7 +60,8 @@ class ServiceGateway
         StudentPaymentsService      $studentPaymentsService,
         StudentSchemeLectureService $studentSchemeLectureService,
         RoomService                 $roomService,
-        RegisterService             $registerService)
+        RegisterService             $registerService,
+        AttendanceService           $attendanceService)
     {
         $this->courseService                 = $courseService;
         $this->scheduleService               = $scheduleService;
@@ -76,6 +80,7 @@ class ServiceGateway
         $this->studentSchemeLectureService   = $studentSchemeLectureService;
         $this->roomService                   = $roomService;
         $this->registerService               = $registerService;
+        $this->attendanceService             = $attendanceService;
     }
 
 }

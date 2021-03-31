@@ -4,6 +4,7 @@ namespace App\Services\Teacher;
 
 use App\Schedule;
 use App\Services\Service;
+use App\Student_Payment;
 use App\Teacher;
 use App\User;
 use DateInterval;
@@ -12,7 +13,6 @@ use DateTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use PhpParser\Node\Expr\Cast\Object_;
 
 class TeacherService extends Service
 {
@@ -83,7 +83,7 @@ class TeacherService extends Service
         return $scheduleDuration;
     }
 
-    public function findMonthlyRemunerations($teacherId, $lectureId, $year, $month) {
+    public function findMonthlyRemunerations($lectureId, $year, $month) {
         $lec_stud_assc2 = DB::statement("Create or replace view teacher_monthly_payments AS
                                             select * from monthly_payments where year='$year' AND month='$month' AND student_payment_id IN
                                             (select student_payment_id from payment_lec_associations
@@ -98,5 +98,40 @@ class TeacherService extends Service
 
 
         return $lec_stud_assc3;
+    }
+
+    public function findMonthlyRemunerationsPaid($teacherId, $lectureId, $year, $month){
+        DB::statement("Create or replace view teacher_paid_payments AS
+                            SELECT * from teacher_institute_shares
+                            where teacher_id=$teacherId AND monthly_payment_id IN
+                            (select id from monthly_payments where year='$year' AND month='$month'
+                             AND status='payed' AND student_payment_id IN
+                            (select student_payment_id from payment_lec_associations
+                            where lec_student_ass_id IN
+                            (Select lecture_student_id from lecture_student
+                            where lecture_id=$lectureId)))");
+
+        $paid_students =
+        DB::select("SELECT name, registration_no, monthly_payments.status, student__payments.payment_type, year,
+                       month, teacher_institute_shares.teacher_amount, student__payments.id as student_payment_id,
+                       monthly_payments.payment_date
+                       FROM teacher_paid_payments inner join student__payments ON
+                       student__payments.id=teacher_paid_payments.student_payment_id
+                       inner join teacher_institute_shares ON
+                       teacher_institute_shares.monthly_payment_id=teacher_paid_payments.monthly_payment_id
+                       inner join monthly_payments ON
+                       monthly_payments.id=teacher_paid_payments.monthly_payment_id inner join students ON
+                       monthly_payments.student_id=students.id");
+
+//        $withPaymentInfo = [];
+//
+//        foreach ($paid_students as $paid_student) {
+//           if ($paid_student->payment_type == "normal"){
+//                $studentPayment = Student_Payment::findOrFail($paid_student->payment_id);
+//
+//           }
+//        }
+
+        return $paid_students;
     }
 }

@@ -66,7 +66,7 @@ class ScheduleService extends Service
     }
 
     public function getAllSchedulesOfOneLecture($lectureId) {
-        return Schedule::where('lecture_id', $lectureId)->get();
+        return Schedule::where('lecture_id', $lectureId)->get()->first();
     }
 
     public function getAllSchedules() {
