@@ -134,4 +134,18 @@ class TeacherService extends Service
 
         return $paid_students;
     }
+
+    public function findTeacherScheduleTimetable($teacherId) {
+
+        DB::statement("CREATE OR REPLACE VIEW teacher_timetables AS
+                            SELECT * from schedules where lecture_id IN
+                            (SELECT id FROM lectures WHERE teacher_id=$teacherId)");
+
+        $teacherSchedules =
+            DB::select("SELECT lectures.name as lecture_name, day, start_time, end_time, rooms.name as room_name
+                             FROM teacher_timetables INNER JOIN lectures ON teacher_timetables.lecture_id=lectures.id
+                             INNER JOIN rooms ON teacher_timetables.room_id=rooms.id");
+
+        return $teacherSchedules;
+    }
 }

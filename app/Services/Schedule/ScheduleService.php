@@ -35,6 +35,9 @@ class ScheduleService extends Service
         if (!($startTimeMatch or $endTimeMatch)) {
             $schedule = Schedule::create($requestBody);
             $schedule_start_date = strtotime($schedule->schedule_start_date);
+            $day = date('l',$schedule_start_date);
+            $schedule->day = $day;
+            $schedule->save();
             $schedule_end_date = strtotime($schedule->schedule_end_date);
             $end_date_compare_format = date('Y-m-d',$schedule_end_date);
             $endDateObj = new \DateTime($end_date_compare_format);

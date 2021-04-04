@@ -18,14 +18,14 @@ class LoginService extends AuthService
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken('Laravel Password Grant Client')->accessToken;
                 $userRole = Role::findOrFail($user->role_id);
-                $authorizedViews = $this->getAuthorizedViews($userRole->id);
+//                $authorizedViews = $this->getAuthorizedViews($userRole->id);
                 $response = [
                     'token'    => $token,
                     'userId'       => $user->id,
                     'username' => $user->username,
                     'userRole'     => $user->role_name,
                     'userRoleId'  => $user->role_id,
-                    'userViews'    => $authorizedViews
+                    'userViews'    => null
                 ];
                 switch ($user->role_id){
 //                    case 1:

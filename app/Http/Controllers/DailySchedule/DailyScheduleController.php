@@ -5,6 +5,7 @@ namespace App\Http\Controllers\DailySchedule;
 use App\DailySchedule;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\DailySchedule\DailyScheduleStoreRequest;
+use App\ScheduleNotifications;
 use App\Services\ServiceGateway;
 use Illuminate\Http\Request;
 
@@ -55,6 +56,10 @@ class DailyScheduleController extends ApiController
     public function destroy(DailySchedule $dailySchedule)
     {
         $dailySchedule->delete();
+        $notification = new ScheduleNotifications();
+        $notification->daily_schedule_id = $dailySchedule->id;
+        $notification->message = "delete";
+        $notification->save();
         return $this->showOne($dailySchedule);
     }
 }

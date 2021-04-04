@@ -4,6 +4,7 @@
 namespace App\Services\DailySchedule;
 use App\Attendance;
 use App\DailySchedule;
+use App\ScheduleNotifications;
 use App\Services\Service;
 use App\Student;
 use Illuminate\Support\Carbon;
@@ -33,6 +34,29 @@ class DailyScheduleService extends Service
         if (!($startTimeMatch or $endTimeMatch))
         {
             $dailySchedule = DailySchedule::create($requestBody);
+
+            $lecture     = $dailySchedule->lecture;
+            $lectureName = $lecture->name;
+            $roomName    = $dailySchedule->room->name;
+            $date        = $dailySchedule->date;
+            $startTime   = $dailySchedule->start_time;
+            $endTime     = $dailySchedule->end_time;
+
+
+            $email = "A new lecture schedule was created for $lectureName <br>
+                        Room - $roomName. <br>
+                        Date - $date. <br>
+                        From - $startTime. <br>
+                        To   - $endTime. <br>";
+
+
+
+            $notification = new ScheduleNotifications();
+            $notification->daily_schedule_id = $dailySchedule->id;
+            $notification->message = "create";
+            $notification->save();
+
+//            mail('sadiqzufer@gmail.com','Class Creation', 'A new class was created');
             return $this->showOne($dailySchedule);
         } else {
             return $this->errorResponse("THIS_TIME_IS_NOT_FREE",400);
@@ -98,6 +122,8 @@ class DailyScheduleService extends Service
 
         if (!($startTimeMatch or $endTimeMatch))
         {
+
+
             DB::update(
                 'update daily_schedules
                       set date = ?,
@@ -108,6 +134,12 @@ class DailyScheduleService extends Service
                 [$requestBody->date, $requestBody->start_time, $requestBody->end_time, $requestBody->room_id,
                 $dailySchedule->id]);
 
+
+            $notification = new ScheduleNotifications();
+            $notification->daily_schedule_id = $dailySchedule->id;
+            $notification->message = "update";
+            $notification->save();
+//            mail('sadiqzufer@gmail.com','Class Creation', 'A new class was created');
             return $this->showOne($dailySchedule);
         } else {
             return $this->errorResponse("THIS_TIME_IS_NOT_FREE",400);

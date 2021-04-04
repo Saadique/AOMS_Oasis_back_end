@@ -14,6 +14,7 @@ use App\Services\Payment_Scheme\PaymentSchemeService;
 use App\Services\PaymentStudent\PaymentStudentService;
 use App\Services\Registration\RegistrationService;
 use App\Services\Room\RoomService;
+use App\Services\Schedule\ScheduleNotificationService;
 use App\Services\Schedule\ScheduleService;
 use App\Services\Student\StudentService;
 use App\Services\StudentPayments\StudentPaymentsService;
@@ -41,6 +42,7 @@ class ServiceGateway
     public $roomService;
     public $registerService;
     public $attendanceService;
+    public $scheduleNotificationService;
 
 
     public function __construct(
@@ -61,7 +63,8 @@ class ServiceGateway
         StudentSchemeLectureService $studentSchemeLectureService,
         RoomService                 $roomService,
         RegisterService             $registerService,
-        AttendanceService           $attendanceService)
+        AttendanceService           $attendanceService,
+        ScheduleNotificationService $scheduleNotificationService)
     {
         $this->courseService                 = $courseService;
         $this->scheduleService               = $scheduleService;
@@ -81,6 +84,7 @@ class ServiceGateway
         $this->roomService                   = $roomService;
         $this->registerService               = $registerService;
         $this->attendanceService             = $attendanceService;
+        $this->scheduleNotificationService   = $scheduleNotificationService;
     }
 
 }

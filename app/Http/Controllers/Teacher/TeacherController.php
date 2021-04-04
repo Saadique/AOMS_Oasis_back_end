@@ -49,6 +49,10 @@ class TeacherController extends ApiController
         return $this->serviceGateway->teacherService->findMonthlyRemunerationsPaid($teacherId, $lectureId, $year, $month);
     }
 
+    public function getTeacherSchedulesTimetable($teacherId) {
+        return $this->serviceGateway->teacherService->findTeacherScheduleTimetable($teacherId);
+    }
+
     public function update(Request $request, Teacher $teacher)
     {
         //

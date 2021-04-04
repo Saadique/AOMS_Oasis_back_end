@@ -121,6 +121,8 @@ Route::get('teacher/lecture/month/remuneration/{lectureId}/{year}/{month}/all', 
 //teacher monthly income for lecture
 Route::get('teacher/lecture/month/remuneration/{teacherId}/{lectureId}/{year}/{month}/paid', 'Teacher\TeacherController@getMonthlyRemunerationPaid');
 
+//teacher time tables
+Route::get('teacher/timetables/{teacherId}', 'Teacher\TeacherController@getTeacherSchedulesTimetable');
 
 //lecture months
 Route::get('teacher/lecture/months/{lectureId}', 'Teacher\TeacherController@getLectureMonths');
@@ -129,3 +131,9 @@ Route::get('teacher/lecture/months/{lectureId}', 'Teacher\TeacherController@getL
 Route::get('student/lectures/{studentId}', 'Student\StudentController@getStudentLectures');
 
 Route::get('test/due', 'StudentPayments\MonthlyPaymentController@test');
+
+//schedule notifications of teacher
+Route::get('schedules/notifications/teacher/{teacherId}', 'Schedule\ScheduleNotificationsController@getTeacherUptoDateNotifications');
+
+//schedule notifications of student
+Route::get('schedules/notifications/student/{studentId}', 'Schedule\ScheduleNotificationsController@getStudentUptoDateNotifications');
