@@ -28,6 +28,10 @@ class AttendanceController extends ApiController
         return $this->serviceGateway->attendanceService->markAttendance($requestBody);
     }
 
+    public function getStudentsAttendancesOfLecture($lecture_id, $date) {
+        return $this->serviceGateway->attendanceService->findStudentAttendancesOfLecture($lecture_id, $date);
+    }
+
     public function show(Attendance $attendance)
     {
 

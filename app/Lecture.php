@@ -36,4 +36,8 @@ class Lecture extends Model
     public function courseMedium() {
         return $this->belongsTo(CourseMedium::class);
     }
+
+    public function lessons() {
+        return $this->hasMany(LectureLessons::class);
+    }
 }

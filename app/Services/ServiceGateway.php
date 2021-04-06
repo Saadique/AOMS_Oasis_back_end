@@ -8,6 +8,7 @@ use App\Services\Auth\RegisterService;
 use App\Services\Course\CourseService;
 use App\Services\CourseMedium\CourseMediumService;
 use App\Services\DailySchedule\DailyScheduleService;
+use App\Services\Lecture\LectureLessonsService;
 use App\Services\Lecture\LectureService;
 use App\Services\Payment\PaymentService;
 use App\Services\Payment_Scheme\PaymentSchemeService;
@@ -43,6 +44,7 @@ class ServiceGateway
     public $registerService;
     public $attendanceService;
     public $scheduleNotificationService;
+    public $lectureLessonService;
 
 
     public function __construct(
@@ -64,7 +66,8 @@ class ServiceGateway
         RoomService                 $roomService,
         RegisterService             $registerService,
         AttendanceService           $attendanceService,
-        ScheduleNotificationService $scheduleNotificationService)
+        ScheduleNotificationService $scheduleNotificationService,
+        LectureLessonsService       $lectureLessonService)
     {
         $this->courseService                 = $courseService;
         $this->scheduleService               = $scheduleService;
@@ -85,6 +88,7 @@ class ServiceGateway
         $this->registerService               = $registerService;
         $this->attendanceService             = $attendanceService;
         $this->scheduleNotificationService   = $scheduleNotificationService;
+        $this->lectureLessonService          = $lectureLessonService;
     }
 
 }

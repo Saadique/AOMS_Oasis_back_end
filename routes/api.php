@@ -63,6 +63,8 @@ Route::resource('student-payments', 'StudentPayments\StudentPaymentController', 
 Route::resource('student-scheme-lecture', 'StudentSchemeLecture\StudentSchemeLectureController', ['except' => ['create', 'edit']]);
 Route::resource('monthly-payments', 'StudentPayments\MonthlyPaymentController', ['except' => ['create', 'edit']]);
 Route::resource('attendances', 'Attendance\AttendanceController', ['except' => ['create', 'edit']]);
+Route::resource('lessons', 'Lecture\LectureLessonsController', ['except' => ['create', 'edit']]);
+Route::resource('lessons_materials', 'Lecture\LessonMaterialsController', ['except' => ['create', 'edit']]);
 
 
 Route::get('daily-schedules/date/{date}', 'DailySchedule\DailyScheduleController@showByDate');
@@ -137,3 +139,17 @@ Route::get('schedules/notifications/teacher/{teacherId}', 'Schedule\ScheduleNoti
 
 //schedule notifications of student
 Route::get('schedules/notifications/student/{studentId}', 'Schedule\ScheduleNotificationsController@getStudentUptoDateNotifications');
+
+
+//get attendances of lectures by date
+Route::get('attendances/lecture/date/{lecture_id}/{date}', 'Attendance\AttendanceController@getStudentsAttendancesOfLecture');
+
+//get lessons by lecture
+Route::get('lessons/lecture/{lecture_id}', 'Lecture\LectureLessonsController@getLessonsByLecture');
+
+
+//get lecture materials by lesson
+Route::get('lessons_materials/lesson/{lesson_id}', 'Lecture\LessonMaterialsController@getMaterialsByLesson');
+
+//download file
+Route::post('lessons_materials/file', 'Lecture\LessonMaterialsController@downloadFile');
