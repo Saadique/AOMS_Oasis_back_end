@@ -2,8 +2,7 @@
 
 namespace App\Services\Auth;
 use App\Admin;
-use App\FrontOfficeStaff;
-use App\Manager;
+use App\AdministrativeStaff;
 use App\Role;
 use App\Student;
 use App\Teacher;
@@ -15,31 +14,35 @@ class LoginService extends AuthService
     public function login($request) {
         $user = User::where('username', $request->username)->first();
         if ($user) {
+            if ($user->status == 'deleted') {
+                $response = ["message" => 'Your Account is Deactivated or Suspended'];
+                return response($response, 400);
+            }
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken('Laravel Password Grant Client')->accessToken;
                 $userRole = Role::findOrFail($user->role_id);
 //                $authorizedViews = $this->getAuthorizedViews($userRole->id);
                 $response = [
-                    'token'    => $token,
-                    'userId'       => $user->id,
-                    'username' => $user->username,
-                    'userRole'     => $user->role_name,
-                    'userRoleId'  => $user->role_id,
-                    'userViews'    => null
+                    'token'      => $token,
+                    'userId'     => $user->id,
+                    'username'   => $user->username,
+                    'userRole'   => $user->role_name,
+                    'userRoleId' => $user->role_id,
+                    'userViews'  => null
                 ];
                 switch ($user->role_id){
-//                    case 1:
-//                        $response["admin"] = Admin::where('user_id', $user->id)->first();
-//                        break;
                     case 1:
-                        $response["teacher"] = Teacher::where('user_id', $user->id)->first();
+                        $response["admin"] = Admin::where('user_id', $user->id)->first();
                         break;
                     case 2:
                         $response["student"] = Student::where('user_id', $user->id)->first();
                         break;
-//                    case 4:
-//                        $response["frontOfficeStaff"] = FrontOfficeStaff::where('user_id', $user->id)->first();
-//                        break;
+                    case 3:
+                        $response["teacher"] = Teacher::where('user_id', $user->id)->first();
+                        break;
+                    case 4:
+                        $response["administrative_staff"] = AdministrativeStaff::where('user_id', $user->id)->first();
+                        break;
 //                    case 5:
 //                        $response["manager"] = Manager::where('user_id', $user->id)->first();
 //                        break;

@@ -19,6 +19,7 @@ class CreateCourseMediumTable extends Migration
             $table->unsignedInteger('medium_id')->unsigned();
             $table->string('name')->nullable();
             $table->string('course_medium_type')->nullable();
+            $table->string('status')->nullable()->default('active');
 
             $table->unique(['course_id', 'medium_id']);
 

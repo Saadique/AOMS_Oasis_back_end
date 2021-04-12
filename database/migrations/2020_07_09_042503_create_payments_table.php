@@ -16,6 +16,7 @@ class CreatePaymentsTable extends Migration
             $table->double('student_fee')->nullable();
             $table->string('fixed_institute_amount')->nullable();
             $table->integer('teacher_percentage')->nullable();
+            $table->string('status')->nullable()->default('active');
 
             $table->foreign('lecture_id')
                 ->references('id')

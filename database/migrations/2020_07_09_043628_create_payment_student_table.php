@@ -19,6 +19,7 @@ class CreatePaymentStudentTable extends Migration
             $table->string('payment_month')->nullable();
             $table->date('payment_date')->nullable();
             $table->string('type')->nullable();
+            $table->string('status')->nullable()->default('active');
 
 
             $table->foreign('student_id')

@@ -19,6 +19,11 @@ class PaymentService extends Service
         $payment->save();
     }
 
+    public function findPaymentOfLecture($lectureId) {
+        $payment = Payment::where('lecture_id', $lectureId)->first();
+        return $payment;
+    }
+
     public function getAllPayedStudents($month, $lecture_id){
         $lecture = Lecture::find($lecture_id);
         $payment = $lecture->payment;

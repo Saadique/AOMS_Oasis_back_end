@@ -17,7 +17,7 @@ class CreateRoleViewTable extends Migration
             $table->id();
             $table->unsignedBigInteger('role_id');
             $table->unsignedBigInteger('view_id');
-            $table->string('status');
+            $table->string('status')->default('active');
 
             $table->foreign('role_id')
                 ->references('id')

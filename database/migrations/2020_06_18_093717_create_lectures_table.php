@@ -24,6 +24,7 @@ class CreateLecturesTable extends Migration
             $table->unsignedInteger('teacher_id');
             $table->unsignedInteger('course_medium_id');
             $table->unsignedInteger('subject_id');
+            $table->string('status')->nullable()->default('active');
             $table->timestamps();
 
             $table->foreign('teacher_id')

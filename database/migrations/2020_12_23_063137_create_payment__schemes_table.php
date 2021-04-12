@@ -21,6 +21,7 @@ class CreatePaymentSchemesTable extends Migration
             $table->double('fixed_institute_amount')->nullable();
             $table->string('class_level')->nullable();
             $table->string('temp')->nullable();
+            $table->string('status')->nullable()->default('active');
             $table->timestamps();
         });
     }

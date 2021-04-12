@@ -20,6 +20,7 @@ class CreateRegistrationsTable extends Migration
             $table->date('registration_date')->nullable();
             $table->string('status')->default('pending');
             $table->unsignedInteger('student_id');
+            $table->string('delete_status')->nullable()->default('active');
 
             $table->foreign('student_id')
                 ->references('id')

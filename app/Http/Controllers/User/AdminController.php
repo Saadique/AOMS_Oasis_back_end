@@ -1,36 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Payment;
+namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\ApiController;
-use App\Payment;
+use App\Admin;
+use App\Http\Controllers\Controller;
 use App\Services\ServiceGateway;
 use Illuminate\Http\Request;
 
-class PaymentController extends ApiController
+class AdminController extends Controller
 {
-
     private $serviceGateway;
 
     public function __construct(ServiceGateway $serviceGateway)
     {
         $this->serviceGateway = $serviceGateway;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         //
@@ -39,15 +30,17 @@ class PaymentController extends ApiController
 
     public function store(Request $request)
     {
-        //
+        $requestBody = $request->all();
+        return $this->serviceGateway->userService->createAdmin($requestBody);
     }
 
-    public function getPaymentOfLecture($lectureId) {
-        return $this->serviceGateway->paymentService->findPaymentOfLecture($lectureId);
-    }
-
-
-    public function show(Payment $payment)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Admin  $admin
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Admin $admin)
     {
         //
     }
@@ -55,10 +48,10 @@ class PaymentController extends ApiController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Payment  $payment
+     * @param  \App\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function edit(Payment $payment)
+    public function edit(Admin $admin)
     {
         //
     }
@@ -67,10 +60,10 @@ class PaymentController extends ApiController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Payment  $payment
+     * @param  \App\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Payment $payment)
+    public function update(Request $request, Admin $admin)
     {
         //
     }
@@ -78,10 +71,10 @@ class PaymentController extends ApiController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Payment  $payment
+     * @param  \App\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Payment $payment)
+    public function destroy(Admin $admin)
     {
         //
     }

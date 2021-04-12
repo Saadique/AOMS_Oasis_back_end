@@ -19,8 +19,17 @@ class MediumController extends ApiController
 
     public function index()
     {
+        $mediums = Medium::where('status','active')->get();
+        return $this->showAll($mediums);
+    }
+
+    public function getAllMediums() {
         $mediums = Medium::all();
         return $this->showAll($mediums);
+    }
+
+    public function activateMedium($mediumId) {
+        return $this->serviceGateway->mediumService->activateMedium($mediumId);
     }
 
 
@@ -28,8 +37,7 @@ class MediumController extends ApiController
     public function store(Request $request)
     {
         $requestData = $request->all();
-        $medium = Medium::create($requestData);
-        return $this->showOne($medium);
+        return $this->serviceGateway->mediumService->createMedium($requestData);
     }
 
 
@@ -42,12 +50,13 @@ class MediumController extends ApiController
 
     public function update(Request $request, Medium $medium)
     {
-
+        $requestBody = $request->all();
+        return $this->serviceGateway->mediumService->updateMedium($requestBody, $medium);
     }
 
 
     public function destroy(Medium $medium)
     {
-        //
+        return $this->serviceGateway->mediumService->deleteMedium($medium);
     }
 }

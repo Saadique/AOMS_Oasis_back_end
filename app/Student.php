@@ -29,4 +29,8 @@ class Student extends Model
     public function studentPayments() {
         return $this->hasMany(Student_Payment::class);
     }
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

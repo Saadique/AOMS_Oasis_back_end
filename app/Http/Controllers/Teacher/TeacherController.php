@@ -22,6 +22,10 @@ class TeacherController extends ApiController
         return Teacher::all();
     }
 
+    public function getAllActiveTeachers() {
+        return $this->serviceGateway->teacherService->findAllActiveTeachers();
+    }
+
     public function store(Request $request)
     {
         $requestBody = $request->all();

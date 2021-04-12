@@ -7,6 +7,7 @@ use App\Http\Requests\Student\StudentStoreRequest;
 use App\Services\ServiceGateway;
 use App\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StudentController extends ApiController
 {
@@ -36,6 +37,20 @@ class StudentController extends ApiController
 
     public function getStudentLectures($studentId){
         return $this->serviceGateway->studentService->findStudentLectures($studentId);
+    }
+
+    public function deactivateStudent($studentId){
+        $student = Student::findOrFail($studentId);
+        $student->status = "deleted";
+
+        DB::update("UPDATE lecture_student SET status='deleted' WHERE student_id=$student->id");
+        DB::update("UPDATE student__payments SET status='deleted' WHERE student_id=$student->id");
+        DB::update("UPDATE monthly_payments SET status='deleted' WHERE student_id=$student->id");
+        DB::update("UPDATE users SET status='deleted' WHERE user_id=$student->user_id");
+        DB::update("UPDATE student_scheme_lectures SET status='deleted' WHERE student_id=$student->id");
+        DB::update("UPDATE payment_lec_associations SET status='deleted' WHERE lec_student_ass_id
+                                                               IN(SELECT lecture_student_id FROM lecture_student WHERE student_id=$student->id)");
+        return $student;
     }
 
 

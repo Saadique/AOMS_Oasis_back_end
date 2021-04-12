@@ -15,6 +15,8 @@ class CreateLessonMaterialsTable extends Migration
             $table->string('path')->nullable();
             $table->string('file_name')->nullable();
             $table->string('file_extension')->nullable();
+            $table->string('unique_name')->nullable();
+            $table->string('status')->nullable()->default('active');
 
             $table->foreign('lesson_id')
                 ->references('id')

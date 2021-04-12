@@ -18,6 +18,7 @@ class CreateLectureStudentTable extends Migration
             $table->unsignedInteger('lecture_id')->unsigned();
             $table->unsignedInteger('student_id')->unsigned();
             $table->date('enrolled_date')->nullable();
+            $table->string('status')->nullable()->default('active');
 
             $table->unique(['lecture_id', 'student_id']);
 

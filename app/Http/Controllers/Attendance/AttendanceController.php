@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class AttendanceController extends ApiController
 {
-
     private $serviceGateway;
 
     public function __construct(ServiceGateway $serviceGateway)

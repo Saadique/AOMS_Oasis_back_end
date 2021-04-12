@@ -17,6 +17,7 @@ class CreateTeacherInstituteSharesTable extends Migration
             $table->string('status')->nullable();
             $table->double('teacher_amount')->nullable();
             $table->double('institute_amount')->nullable();
+            $table->string('delete_status')->nullable()->default('active');
 
             $table->foreign('monthly_payment_id')
                 ->references('id')

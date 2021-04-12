@@ -26,6 +26,7 @@ class CreateStudentsTable extends Migration
             $table->integer('parent_contact')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('payment_type')->nullable();
+            $table->string('status')->nullable()->default('active');
 
             $table->foreign('user_id')
                 ->references('id')

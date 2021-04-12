@@ -20,6 +20,7 @@ class CreateMonthlyPaymentsTable extends Migration
             $table->string('alert_status')->nullable();
             $table->string('status')->nullable();
             $table->string('teacher_remuneration_status')->nullable();
+            $table->string('delete_status')->nullable()->default('active');
             $table->timestamps();
 
             $table->foreign('student_payment_id')

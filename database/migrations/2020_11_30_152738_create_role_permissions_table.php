@@ -21,7 +21,7 @@ class CreateRolePermissionsTable extends Migration
             $table->boolean('can_view')->nullable();
             $table->boolean('can_update')->nullable();
             $table->boolean('can_delete')->nullable();
-            $table->string('status')->nullable();
+            $table->string('status')->nullable()->default('active');
 
             $table->foreign('resource_id')
                 ->references('id')

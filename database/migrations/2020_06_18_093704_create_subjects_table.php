@@ -21,6 +21,7 @@ class CreateSubjectsTable extends Migration
             $table->string('type')->default(Subject::$COMPULSORY);
             $table->unsignedInteger('course_medium_id');
             $table->string('subject_type')->nullable();
+            $table->string('status')->nullable()->default('active');
             $table->timestamps();
 
             $table->foreign('course_medium_id')

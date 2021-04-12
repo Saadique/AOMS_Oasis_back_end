@@ -24,6 +24,7 @@ class CreateSchedulesTable extends Migration
             $table->date('schedule_end_date')->nullable();
             $table->unsignedInteger('room_id');
             $table->unsignedInteger('lecture_id');
+            $table->string('status')->nullable()->default('active');
             $table->timestamps();
 
             $table->foreign('room_id')

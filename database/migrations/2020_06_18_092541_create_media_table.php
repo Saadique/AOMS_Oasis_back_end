@@ -18,6 +18,7 @@ class CreateMediaTable extends Migration
             $table->string('name')->unique();
             $table->string('short_name')->nullable();
             $table->string('description')->nullable();
+            $table->string('status')->nullable()->default('active');
             $table->timestamps();
         });
     }

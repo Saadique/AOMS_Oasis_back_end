@@ -18,7 +18,7 @@ class CreateRoomsTable extends Migration
             $table->string('name')->nullable();
             $table->string('no_of_seats')->nullable();
             $table->string('description')->nullable();
-            $table->string('status')->nullable();
+            $table->string('status')->nullable()->default('active');
             $table->timestamps();
         });
     }

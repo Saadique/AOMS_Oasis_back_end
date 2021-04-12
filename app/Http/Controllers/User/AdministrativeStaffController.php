@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Http\Controllers\User;
+
+use App\AdministrativeStaff;
+use App\Http\Controllers\Controller;
+use App\Services\ServiceGateway;
+use Illuminate\Http\Request;
+
+class AdministrativeStaffController extends Controller
+{
+
+    private $serviceGateway;
+
+    public function __construct(ServiceGateway $serviceGateway)
+    {
+        $this->serviceGateway = $serviceGateway;
+    }
+
+    public function index()
+    {
+        //
+    }
+
+    public function create()
+    {
+        //
+    }
+
+    public function store(Request $request)
+    {
+        $requestBody = $request->all();
+        return $this->serviceGateway->userService->createAdministrativeStaff($requestBody);
+    }
+
+    public function show(AdministrativeStaff $administrativeStaff)
+    {
+        //
+    }
+
+    public function edit(AdministrativeStaff $administrativeStaff)
+    {
+        //
+    }
+
+    public function update(Request $request, AdministrativeStaff $administrativeStaff)
+    {
+        //
+    }
+
+    public function destroy(AdministrativeStaff $administrativeStaff)
+    {
+        //
+    }
+}

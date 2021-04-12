@@ -20,6 +20,11 @@ class CourseController extends ApiController
 
     public function index()
     {
+        $courses = $this->serviceGateway->courseService->getAllActiveCourses();
+        return $this->showAll($courses);
+    }
+
+    public function getAllCourses() {
         $courses = Course::all();
         return $this->showAll($courses);
     }
@@ -48,6 +53,10 @@ class CourseController extends ApiController
 
     public function destroy(Course $course)
     {
+
+    }
+
+    public function changeDeleteStatus($courseId, $status) {
 
     }
 }

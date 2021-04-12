@@ -4,26 +4,29 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTeachersTable extends Migration
+class CreateAdministrativeStaffTable extends Migration
 {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
-        Schema::create('teachers', function (Blueprint $table) {
-            $table->increments('id')->unsigned();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->integer('mobile_no')->nullable();
+        Schema::create('administrative_staff', function (Blueprint $table) {
+            $table->id();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('contact_number')->nullable();
+            $table->string('nic')->nullable();
             $table->string('address')->nullable();
-            $table->string('type')->nullable();
+            $table->string('email')->nullable();
             $table->string('status')->nullable()->default('active');
-
             $table->unsignedBigInteger('user_id')->nullable();
 
             $table->foreign('user_id')
                 ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
-
+                ->on('users');
             $table->timestamps();
         });
     }
@@ -35,6 +38,6 @@ class CreateTeachersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('teachers');
+        Schema::dropIfExists('administrative_staff');
     }
 }

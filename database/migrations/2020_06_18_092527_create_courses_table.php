@@ -20,6 +20,7 @@ class CreateCoursesTable extends Migration
             $table->string('coordinator')->nullable();
             $table->integer('no_of_students')->nullable();
             $table->string('course_type')->nullable();
+            $table->string('status')->nullable()->default('active');
             $table->timestamps();
         });
     }

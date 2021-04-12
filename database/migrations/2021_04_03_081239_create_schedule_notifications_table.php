@@ -16,9 +16,14 @@ class CreateScheduleNotificationsTable extends Migration
         Schema::create('schedule_notifications', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('daily_schedule_id')->nullable();
-            $table->string('message')->nullable();
+            $table->string('action')->nullable();
             $table->string('mail_status')->nullable();
             $table->string('sms_status')->nullable();
+            $table->date('old_date')->nullable();
+            $table->string('old_start_time')->nullable();
+            $table->string('old_end_time')->nullable();
+            $table->unsignedInteger('old_room_id')->nullable();
+            $table->string('status')->nullable()->default('active');
 
             $table->foreign('daily_schedule_id')
                 ->references('id')

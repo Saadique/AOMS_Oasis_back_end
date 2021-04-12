@@ -69,6 +69,10 @@ class UserController extends Controller
         return response()->json(['success' => $user], $this->successStatus);
     }
 
+    public function getAllUserInformationByRole($role) {
+        return $this->serviceGateway->userService->findAllUserInformationByRole($role);
+    }
+
 
     public function index()
     {

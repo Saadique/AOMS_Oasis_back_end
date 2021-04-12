@@ -19,6 +19,7 @@ class CreateStudentSchemeLecturesTable extends Migration
             $table->unsignedBigInteger('student_payment_id')->nullable();
             $table->unsignedInteger('payment_scheme_id')->nullable();
             $table->unsignedInteger('lecture_id')->nullable();
+            $table->string('status')->nullable()->default('active');
 
 
             $table->foreign('student_id')

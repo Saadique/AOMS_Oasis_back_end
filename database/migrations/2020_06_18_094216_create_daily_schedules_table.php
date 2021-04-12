@@ -24,6 +24,7 @@ class CreateDailySchedulesTable extends Migration
             $table->unsignedInteger('room_id');
             $table->unsignedInteger('schedule_id')->nullable();
             $table->unsignedInteger('lecture_id');
+            $table->string('delete_status')->nullable()->default('active');
             $table->timestamps();
 
             $table->foreign('room_id')

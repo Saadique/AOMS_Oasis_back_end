@@ -16,12 +16,19 @@ use Illuminate\Support\Str;
 
 class TeacherService extends Service
 {
+
+    public function findAllActiveTeachers() {
+        $teachers = Teacher::where('status', 'active')->get();
+        return $teachers;
+    }
+
+
     public function createTeacher($requestBody) {
         $randomPassword = Str::random(8);
 
         $registerData = [
             'username'  => $requestBody['nic'],
-            'role_id'   => 1,
+            'role_id'   => 3,
             'role_name' => 'Teacher',
             'password'  => 12345,
             'password_confirmation' => 12345
@@ -89,12 +96,12 @@ class TeacherService extends Service
                                             (select student_payment_id from payment_lec_associations
                                             where lec_student_ass_id IN
                                             (Select lecture_student_id from lecture_student
-                                            where lecture_id=$lectureId))");
+                                            where lecture_id=$lectureId AND status='active'))");
 
-        $lec_stud_assc3 = DB::select("select name, registration_no, status, student__payments.payment_type, year, month
+        $lec_stud_assc3 = DB::select("select name, registration_no, teacher_monthly_payments.status, student__payments.payment_type, year, month
                                            FROM teacher_monthly_payments inner join students ON
-                                               teacher_monthly_payments.student_id=students.id inner join student__payments ON
-                                               student__payments.id=teacher_monthly_payments.student_payment_id");
+                                           teacher_monthly_payments.student_id=students.id inner join student__payments ON
+                                           student__payments.id=teacher_monthly_payments.student_payment_id");
 
 
         return $lec_stud_assc3;

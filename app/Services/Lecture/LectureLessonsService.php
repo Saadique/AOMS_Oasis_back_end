@@ -53,6 +53,10 @@ class LectureLessonsService extends Service
         return response()->json(['message' => "SUCCESSFUL"], 200);
     }
 
+    public function updateLectureMaterial(Request $request, LessonMaterials $lessonMaterials) {
+        print_r($request['hasFile']);
+    }
+
     public function getLectureMaterialsOfLesson($lesson_id) {
         $lessons = LessonMaterials::where('lesson_id', $lesson_id)->get();
         return $lessons;
@@ -60,5 +64,17 @@ class LectureLessonsService extends Service
 
     public function downloadFile($requestBody) {
         return response()->download(public_path($requestBody['file_path']),'image');
+    }
+
+    public function findAllMaterialsWithLessons($lecture_id) {
+        $lessons = LectureLessons::where('lecture_id', $lecture_id)->get();
+
+        $withMaterials = [];
+        foreach ($lessons as $lesson) {
+            $materials = LessonMaterials::where('lesson_id',$lesson->id)->get();
+            $lesson->{"materials"} = $materials;
+            array_push($withMaterials, $lesson);
+        }
+        return $withMaterials;
     }
 }

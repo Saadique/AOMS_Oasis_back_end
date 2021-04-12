@@ -37,9 +37,14 @@ class LectureController extends ApiController
         return $this->showOne($lecture);
     }
 
+
     public function getLecturesByCourseMedium($courseMediumId){
 
         return $this->serviceGateway->lectureService->getAllLecturesOfOneCourseMedium($courseMediumId);
+    }
+
+    public function getAllLecByCourseMedium($courseMediumId) {
+        return $this->serviceGateway->lectureService->getAllLecByCourseMedium($courseMediumId);
     }
 
     public function getLecturesBySubject($subjectId){
@@ -53,6 +58,12 @@ class LectureController extends ApiController
 
     public function update(Request $request, Lecture $lecture)
     {
+        $requestBody = $request->all();
+        return $this->serviceGateway->lectureService->updateLecture($requestBody, $lecture);
+    }
+
+
+    public function deactivate($lectureId) {
 
     }
 

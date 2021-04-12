@@ -51,6 +51,8 @@ Route::resource('lectures', 'Lecture\LectureController', ['except' => ['create',
 Route::resource('schedules', 'Schedule\ScheduleController', ['except' => ['create', 'edit']]);
 Route::resource('views', 'View\ViewController', ['except' => ['create', 'edit']]);
 Route::resource('teachers', 'Teacher\TeacherController', ['except' => ['create', 'edit']]);
+Route::resource('admins', 'User\AdminController', ['except' => ['create', 'edit']]);
+Route::resource('administrative_staff', 'User\AdministrativeStaffController', ['except' => ['create', 'edit']]);
 
 Route::resource('course_mediums', 'Course\CourseMediumController', ['except' => ['create', 'edit']]);
 Route::resource('rooms', 'Room\RoomController', ['except' => ['create', 'edit']]);
@@ -66,6 +68,18 @@ Route::resource('attendances', 'Attendance\AttendanceController', ['except' => [
 Route::resource('lessons', 'Lecture\LectureLessonsController', ['except' => ['create', 'edit']]);
 Route::resource('lessons_materials', 'Lecture\LessonMaterialsController', ['except' => ['create', 'edit']]);
 
+//mediums
+Route::get('mediums/all/mediums', 'Medium\MediumController@getAllMediums');
+
+Route::get('mediums/status/activate/{mediumId}', 'Medium\MediumController@activateMedium');
+
+//courses
+Route::get('courses/status/{status}/${courseId}', 'Course\CourseController@changeDeleteStatus');
+
+Route::get('courses/all/courses', 'Course\CourseController@getAllCourses');
+
+//teachers
+Route::get('teachers/all/teachers', 'Teacher\TeacherController@getAllActiveTeachers');
 
 Route::get('daily-schedules/date/{date}', 'DailySchedule\DailyScheduleController@showByDate');
 Route::get('daily-schedules/date/student/{date}/{studentId}', 'DailySchedule\DailyScheduleController@getStudentScheduleByDate');
@@ -74,11 +88,17 @@ Route::get('course/course_mediums/{course_id}', 'Course\CourseMediumController@g
 Route::get('course/medium/all', 'Course\CourseMediumController@getAllCoursesWithCourseMediums');
 Route::get('subjects/course_medium/{courseMediumId}', 'Subject\SubjectController@getAllByCourseMedium');
 
+
+//active lec
 Route::get('lectures/course_medium/{courseMediumId}', 'Lecture\LectureController@getLecturesByCourseMedium');
+
+//all lec
+Route::get('lectures/course_medium/{courseMediumId}/all', 'Lecture\LectureController@getAllLecByCourseMedium');
 
 Route::get('lectures/subjects/{subjectId}', 'Lecture\LectureController@getLecturesBySubject');
 
 Route::get('schedules/lecture/{lectureId}', 'Schedule\ScheduleController@getSchedulesByLecture');
+Route::get('payment/lecture/{lectureId}','Payment\PaymentController@getPaymentOfLecture');
 Route::post('schedules/matching', 'Schedule\ScheduleController@getAllMatchingSchedules');
 
 //get daily-schedules by date and lecture
@@ -153,3 +173,10 @@ Route::get('lessons_materials/lesson/{lesson_id}', 'Lecture\LessonMaterialsContr
 
 //download file
 Route::post('lessons_materials/file', 'Lecture\LessonMaterialsController@downloadFile');
+
+
+//get all lecture materials with lessons
+Route::get('lesson_materials/lesson/lecture/{lecture_id}','Lecture\LessonMaterialsController@getAllMaterialsWithLessons' );
+
+//users
+Route::get('users/role/{role}', 'User\UserController@getAllUserInformationByRole');

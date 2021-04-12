@@ -14,6 +14,7 @@ class CreatePaymentLecAssociationsTable extends Migration
             $table->unsignedBigInteger('student_payment_id')->nullable();
             $table->unsignedInteger('lec_student_ass_id')->nullable();
             $table->unsignedInteger('teacher_id')->nullable();
+            $table->string('status')->nullable()->default('active');
 
             $table->foreign('student_payment_id')
                 ->references('id')

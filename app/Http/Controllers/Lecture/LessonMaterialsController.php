@@ -32,9 +32,6 @@ class LessonMaterialsController extends Controller
 
     public function store(Request $request)
     {
-//        $file = $request->file('file');
-//        print_r($request->file('file'));
-//        print_r($request);
         return $this->serviceGateway->lectureLessonService->storeLessonMaterial($request);
     }
 
@@ -57,7 +54,11 @@ class LessonMaterialsController extends Controller
 
     public function update(Request $request, LessonMaterials $lessonMaterials)
     {
-        //
+        return $this->serviceGateway->lectureLessonService->updateLectureMaterial($request, $lessonMaterials);
+    }
+
+    public function getAllMaterialsWithLessons($lecture_id) {
+        return $this->serviceGateway->lectureLessonService->findAllMaterialsWithLessons($lecture_id);
     }
 
 

@@ -19,7 +19,7 @@ class CreateLectureLessonsTable extends Migration
             $table->string('name')->nullable();
             $table->string('description')->nullable();
             $table->string('temp')->nullable();
-            $table->string('temp2')->nullable();
+            $table->string('status')->nullable()->default('active');
 
             $table->foreign('lecture_id')
                 ->references('id')

@@ -12,6 +12,11 @@ use Ramsey\Collection\Collection;
 class CourseService extends Service
 {
 
+    public function getAllActiveCourses() {
+        $activeCourses = Course::where('status', 'active')->get();
+        return $activeCourses;
+    }
+
     public function findCoursesByType($courseType) {
         $courses = Course::where('course_type', $courseType)->get();
         return $courses;
@@ -67,6 +72,12 @@ class CourseService extends Service
             array_push($allCoursesWithMediums,$withCourse);
         }
         return response()->json($allCoursesWithMediums,200);
+    }
+
+    public function changeDeleteStatus($courseId, $status) {
+        $course = Course::findOrFail($courseId);
+        $course->status = $status;
+        return $course;
     }
 
 
