@@ -45,7 +45,8 @@ class AdministrativeStaffController extends Controller
 
     public function update(Request $request, AdministrativeStaff $administrativeStaff)
     {
-        //
+        $requestBody = $request->all();
+        return $this->serviceGateway->userService->updateAdminStaff($requestBody,  $administrativeStaff);
     }
 
     public function destroy(AdministrativeStaff $administrativeStaff)

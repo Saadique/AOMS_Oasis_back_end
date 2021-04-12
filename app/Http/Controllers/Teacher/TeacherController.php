@@ -34,7 +34,7 @@ class TeacherController extends ApiController
 
     public function show(Teacher $teacher)
     {
-        //
+        return $teacher;
     }
 
     public function getAllLecturesOfTeacher($teacherId) {
@@ -55,6 +55,14 @@ class TeacherController extends ApiController
 
     public function getTeacherSchedulesTimetable($teacherId) {
         return $this->serviceGateway->teacherService->findTeacherScheduleTimetable($teacherId);
+    }
+
+    public function getTeacherTotalMonthlyIncome($teacherId) {
+        return $this->serviceGateway->teacherService->findTeacherTotalMonthlyIncome($teacherId);
+    }
+
+    public function getTeacherTotalMonthlyIncomeForLecture($lectureId, $teacherId) {
+        return $this->serviceGateway->teacherService->findTeacherTotalMonthlyIncomeForLecture($lectureId, $teacherId);
     }
 
     public function update(Request $request, Teacher $teacher)

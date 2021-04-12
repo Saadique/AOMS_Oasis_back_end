@@ -49,7 +49,7 @@ class StudentController extends ApiController
         DB::update("UPDATE users SET status='deleted' WHERE user_id=$student->user_id");
         DB::update("UPDATE student_scheme_lectures SET status='deleted' WHERE student_id=$student->id");
         DB::update("UPDATE payment_lec_associations SET status='deleted' WHERE lec_student_ass_id
-                                                               IN(SELECT lecture_student_id FROM lecture_student WHERE student_id=$student->id)");
+                        IN(SELECT lecture_student_id FROM lecture_student WHERE student_id=$student->id)");
         return $student;
     }
 

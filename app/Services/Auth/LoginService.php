@@ -15,7 +15,11 @@ class LoginService extends AuthService
         $user = User::where('username', $request->username)->first();
         if ($user) {
             if ($user->status == 'deleted') {
-                $response = ["message" => 'Your Account is Deactivated or Suspended'];
+                $response = ["message" => 'Your Account is Deactivated.'];
+                return response($response, 400);
+            }
+            if ($user->status == 'suspended') {
+                $response = ["message" => 'Your Account is Suspended temporarily. Please Contact Oasis Administration.'];
                 return response($response, 400);
             }
             if (Hash::check($request->password, $user->password)) {

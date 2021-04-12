@@ -73,6 +73,10 @@ class UserController extends Controller
         return $this->serviceGateway->userService->findAllUserInformationByRole($role);
     }
 
+    public function suspendOrActivateAccount($status, $userId) {
+        return $this->serviceGateway->userService->suspendOrActivateAccount($status, $userId);
+    }
+
 
     public function index()
     {

@@ -142,6 +142,24 @@ class TeacherService extends Service
         return $paid_students;
     }
 
+    public function findTeacherTotalMonthlyIncome($teacherId) {
+        $result = DB::select("SELECT monthly_payments.month, monthly_payments.year,  SUM(teacher_institute_shares.teacher_amount) as total_amount FROM teacher_institute_shares
+                            INNER JOIN monthly_payments ON teacher_institute_shares.monthly_payment_id=monthly_payments.id
+                            WHERE monthly_payments.status='payed' AND teacher_institute_shares.teacher_id=$teacherId
+                            GROUP BY monthly_payments.month, monthly_payments.year;");
+
+        return $result;
+    }
+
+    public function findTeacherTotalMonthlyIncomeForLecture($lectureId, $teacherId) {
+        $result = DB::select("SELECT monthly_payments.month, monthly_payments.year, SUM(teacher_institute_shares.teacher_amount) as total_amount FROM teacher_institute_shares
+                            INNER JOIN monthly_payments ON teacher_institute_shares.monthly_payment_id=monthly_payments.id
+                            WHERE monthly_payments.status='payed' AND teacher_institute_shares.teacher_id=$teacherId AND
+                                  teacher_institute_shares.lecture_id=$lectureId GROUP BY monthly_payments.month, monthly_payments.year;");
+
+        return $result;
+    }
+
     public function findTeacherScheduleTimetable($teacherId) {
 
         DB::statement("CREATE OR REPLACE VIEW teacher_timetables AS

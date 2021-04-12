@@ -143,6 +143,12 @@ Route::get('teacher/lecture/month/remuneration/{lectureId}/{year}/{month}/all', 
 //teacher monthly income for lecture
 Route::get('teacher/lecture/month/remuneration/{teacherId}/{lectureId}/{year}/{month}/paid', 'Teacher\TeacherController@getMonthlyRemunerationPaid');
 
+//total teacher monthly income
+Route::get('teacher/income/total/{teacherId}', 'Teacher\TeacherController@getTeacherTotalMonthlyIncome');
+
+//total teacher monthly income for lecture
+Route::get('teacher/income/total/lecture/{lectureId}/{teacherId}', 'Teacher\TeacherController@getTeacherTotalMonthlyIncomeForLecture');
+
 //teacher time tables
 Route::get('teacher/timetables/{teacherId}', 'Teacher\TeacherController@getTeacherSchedulesTimetable');
 
@@ -180,3 +186,6 @@ Route::get('lesson_materials/lesson/lecture/{lecture_id}','Lecture\LessonMateria
 
 //users
 Route::get('users/role/{role}', 'User\UserController@getAllUserInformationByRole');
+
+//deactivate and activate account
+Route::get('users/status/{status}/{userId}', 'User\UserController@suspendOrActivateAccount');

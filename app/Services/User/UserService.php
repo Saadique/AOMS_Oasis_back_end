@@ -74,4 +74,40 @@ class UserService extends Service
                 return $students;
         }
     }
+
+    public function updateAdmin($requestBody, Admin $admin) {
+        $admin->first_name = $requestBody['first_name'];
+        $admin->last_name = $requestBody['last_name'];
+        $admin->contact_number = $requestBody['contact_number'];
+        $admin->nic = $requestBody['nic'];
+        $admin->email = $requestBody['email'];
+        $admin->update();
+        return $admin;
+    }
+
+    public function updateAdminStaff($requestBody, AdministrativeStaff $admin_staff) {
+        $admin_staff->first_name = $requestBody['first_name'];
+        $admin_staff->last_name = $requestBody['last_name'];
+        $admin_staff->contact_number = $requestBody['contact_number'];
+        $admin_staff->nic = $requestBody['nic'];
+        $admin_staff->email = $requestBody['email'];
+        $admin_staff->update();
+        return $admin_staff;
+    }
+
+    public function suspendOrActivateAccount($status, $userId) {
+        $user = User::findOrFail($userId);
+        if ($user->role_name == 'Admin'){
+            $activeAdmins = Admin::where('status', 'active')->get();
+            if ($activeAdmins->count()<2){
+                $response = ["message" => 'Only 1 Admin Account Exists. Therefore It cannot be SUSPENDED'];
+                return response($response, 400);
+            }
+        }
+        $user->status = $status;
+        $user->update();
+        return $user;
+    }
+
+
 }

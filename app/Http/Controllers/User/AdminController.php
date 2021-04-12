@@ -34,46 +34,26 @@ class AdminController extends Controller
         return $this->serviceGateway->userService->createAdmin($requestBody);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Admin $admin)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(Admin $admin)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, Admin $admin)
     {
-        //
+        $requestBody = $request->all();
+        return $this->serviceGateway->userService->updateAdmin($requestBody, $admin);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(Admin $admin)
     {
         //
