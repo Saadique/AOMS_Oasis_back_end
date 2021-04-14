@@ -53,7 +53,7 @@ class DailyScheduleService extends Service
 
             $notification = new ScheduleNotifications();
             $notification->daily_schedule_id = $dailySchedule->id;
-            $notification->message = "create";
+            $notification->action = "create";
             $notification->save();
 
 //            mail('sadiqzufer@gmail.com','Class Creation', 'A new class was created');
@@ -65,10 +65,21 @@ class DailyScheduleService extends Service
 
     public function findByDate($date)
     {
+        $todayPHP = date("Y-m-d");
+        $today = date('Y-m-d',strtotime($todayPHP));
+        DB::update("UPDATE daily_schedules set status='completed' WHERE date<'$today'");
+
         $formattedDate = Carbon::parse($date)->format('Y-m-d');
         $dailySchedules = DailySchedule::where('date', $formattedDate)
             ->with('lecture.teacher')
             ->get();
+
+        foreach ($dailySchedules as $dailySchedule) {
+            $start_time_12 = date('h:i A ', strtotime($dailySchedule->start_time));
+            $end_time_12  = date('h:i A ', strtotime($dailySchedule->end_time));
+            $dailySchedule->{"start_time_12"} = $start_time_12;
+            $dailySchedule->{"end_time_12"} = $end_time_12;
+        }
         return $dailySchedules;
     }
 
@@ -91,6 +102,8 @@ class DailyScheduleService extends Service
     }
 
     public function findScheduleForDay($date, $startTime, $endTime, $roomId) {
+
+
         $allSchedules = DB::table('daily_schedules')
             ->where([
                 ['date',$date],
@@ -137,7 +150,7 @@ class DailyScheduleService extends Service
 
             $notification = new ScheduleNotifications();
             $notification->daily_schedule_id = $dailySchedule->id;
-            $notification->message = "update";
+            $notification->action = "update";
             $notification->save();
 //            mail('sadiqzufer@gmail.com','Class Creation', 'A new class was created');
             return $this->showOne($dailySchedule);

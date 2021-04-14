@@ -26,7 +26,7 @@ class CourseService extends Service
     {
         $course = Course::where('name',$requestBody['name'])->first();
         if ($course) {
-            return $this->errorResponse("This course already exists", 409);
+            return $this->errorResponse("This course already exists", 400);
         }
 
         $course = Course::create($requestBody);

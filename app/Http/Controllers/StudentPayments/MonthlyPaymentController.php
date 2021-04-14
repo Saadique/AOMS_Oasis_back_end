@@ -29,12 +29,12 @@ class MonthlyPaymentController extends Controller
         return $this->serviceGateway->studentPaymentsService->findMonthlyPayments($studentPaymentId);
     }
 
-    public function getMonthlyPaidPayments($studentPaymentId){
-        return $this->serviceGateway->studentPaymentsService->findPaidPayments($studentPaymentId);
+    public function getMonthlyPaidPayments($studentId){
+        return $this->serviceGateway->studentPaymentsService->findPaidPayments($studentId);
     }
 
-    public function getMonthlyDuePayments($studentPaymentId){
-        return $this->serviceGateway->studentPaymentsService->findDuePayments($studentPaymentId);
+    public function getMonthlyDuePayments($studentId){
+        return $this->serviceGateway->studentPaymentsService->findDuePayments($studentId);
     }
 
     public function update(Request $request, MonthlyPayment $monthlyPayment)

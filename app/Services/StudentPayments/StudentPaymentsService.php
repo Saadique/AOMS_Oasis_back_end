@@ -66,25 +66,25 @@ class StudentPaymentsService extends Service
         return $activeMonthlyPayments;
     }
 
-    public function findPaidPayments($studentPaymentId) {
+    public function findPaidPayments($studentId) {
         $activeMonthlyPayments = MonthlyPayment::where([
-            ['student_payment_id', $studentPaymentId],
+            ['student_id', $studentId],
             ['status', 'payed']
-        ])->get();
+        ])->with('studentPayment.payment','studentPayment.paymentScheme')->get();
         return $activeMonthlyPayments;
     }
 
-    public function findDuePayments($studentPaymentId) {
+    public function findDuePayments($studentId) {
         $activeMonthlyPayments = MonthlyPayment::where([
-            ['student_payment_id', $studentPaymentId],
+            ['student_id', $studentId],
             ['status', 'due']
-        ])->get();
+        ])->with('studentPayment.payment','studentPayment.paymentScheme')->get();
         return $activeMonthlyPayments;
     }
 
     public function findPaymentsOfStudent($studentId) {
         $student = Student::findOrFail($studentId);
-        return $student->studentPayments;
+        return $student->studentPayments()->with('payment','paymentScheme')->get();
     }
 
     public function findAllPaymentsOfStudents($studentId) {
@@ -92,7 +92,6 @@ class StudentPaymentsService extends Service
         $studentPayments =  $student->studentPayments;
         $result = [];
         foreach ($studentPayments as $payment){
-
             if ($payment->payment_type == "normal"){
                 $obj = [
                     "name"=>$payment->payment->name,
@@ -105,7 +104,8 @@ class StudentPaymentsService extends Service
             if ($payment->payment_type == "scheme"){
                 $lectures = StudentSchemeLecture::where([
                     ['student_id', $studentId],
-                    ['payment_scheme_id', $payment->payment_scheme_id]])->with('lecture')->get();
+                    ['payment_scheme_id', $payment->payment_scheme_id]
+                ])->with('lecture')->get();
 
                 $obj = [
                     "name"=>$payment->paymentScheme->scheme_name,

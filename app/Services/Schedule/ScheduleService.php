@@ -14,7 +14,8 @@ class ScheduleService extends Service
         $similarSchedules = DB::table('schedules')
             ->where([
                 ['day',$requestBody['day']],
-                ['room_id',$requestBody['room_id']]
+                ['room_id',$requestBody['room_id']],
+                ['schedule_end_date','<',$requestBody['schedule_start_date']]
             ])->get();
 
         $startTimeMatch = false;
@@ -104,6 +105,76 @@ class ScheduleService extends Service
             return response()->json(null,200);
         }
 
+    }
+
+    public function update($request, DailySchedule $schedule){
+        $result = DB::select("SELECT * FROM daily_schedules HAVING
+                                    date=(SELECT MAX(date) from daily_schedules
+                                    WHERE schedule_id=$schedule->schedule_id)");
+
+        $start_date = $result[0]->date;
+        echo $start_date;
+
+        if ($request['all_change']== true) {
+
+        }
+
+        if ($request->has('schedule_end_date')) {
+            $schedule->schedule_end_date = $request->schedule_end_date;
+            $schedule->start_time = $request->start_time;
+            $schedule->end_time = $request->end_time;
+            $schedule->room_id = $request->room_id;
+            $schedule->update();
+
+            $schedule_start_date = strtotime($schedule->schedule_start_date);
+
+            $schedule_end_date = strtotime($schedule->schedule_end_date);
+
+            $end_date_compare_format = date('Y-m-d',$schedule_end_date);
+            $endDateObj = new \DateTime($end_date_compare_format);
+
+
+            $date_plus_conv = null;
+            $plusSevenFromDate = $schedule_start_date;
+            $lastupdated = null;
+            $lastUpdatedObj = null;
+
+            while($endDateObj > $lastUpdatedObj) {
+                $date_plus = date('m/d/Y', strtotime('+ 7 days', $plusSevenFromDate));
+                $date_plus_conv = strtotime($date_plus);
+                $schedule_starting_month = date("m",$date_plus_conv);
+                $lastupdated = date('Y-m-d',$date_plus_conv);
+                $dailySchedule = new DailySchedule();
+                $dailySchedule->day = $schedule->day;
+                $dailySchedule->date = $lastupdated;
+                $dailySchedule->start_time = $schedule->start_time;
+                $dailySchedule->end_time = $schedule->end_time;
+                $dailySchedule->room_id = $schedule->room_id;
+                $dailySchedule->schedule_id =$schedule->id;
+                $dailySchedule->save();
+                $lastUpdatedObj = new \DateTime($lastupdated);
+                $plusSevenFromDate = $date_plus_conv;
+            }
+        } else {
+            if ($request->has('start_time') and $request->has('end_time')){
+                $schedule->start_time = $request->start_time;
+                $schedule->end_time = $request->end_time;
+                $schedule->update();
+                DB::update(
+                    'update daily_schedules
+                          set start_time = ?,
+                          end_time = ?
+                          where schedule_id = ?',[$request->start_time, $request->end_time, $schedule->id]);
+            }
+
+            if ($request->has('room_id')) {
+                $schedule->room_id = $request->room_id;
+                $schedule->update();
+                DB::update('update daily_schedules set room_id = ?
+                where schedule_id = ?',[$request->room_id, $schedule->id]);
+            }
+        }
+        return $this->showOne($schedule);
     }
 
 

@@ -42,9 +42,11 @@ Route::middleware('auth:api')->group(function () {
     Route::post('user/details', 'User\UserController@details');
 //    Route::get('teacher/lectures/{teacherId}', 'Teacher\TeacherController@getAllLecturesOfTeacher')
 //        ->middleware('api.admin');
+    Route::resource('courses', 'Course\CourseController', ['except' => ['create', 'edit']]);
+
 });
 
-Route::resource('courses', 'Course\CourseController', ['except' => ['create', 'edit']]);
+
 Route::resource('subjects', 'Subject\SubjectController', ['except' => ['create', 'edit']]);
 Route::resource('mediums', 'Medium\MediumController', ['except' => ['create', 'edit']]);
 Route::resource('lectures', 'Lecture\LectureController', ['except' => ['create', 'edit']]);
@@ -128,8 +130,8 @@ Route::post('payment-schemes/find/relevant', 'Payment_Scheme\PaymentSchemeContro
 Route::post('payment-schemes/student/lecture', 'StudentSchemeLecture\StudentSchemeLectureController@getRelevantScheme');
 
 Route::get('monthly-payment/student-payment/payable/{studentPaymentId}', 'StudentPayments\MonthlyPaymentController@getMonthlyPayments');
-Route::get('monthly-payment/student-payment/paid/{studentPaymentId}', 'StudentPayments\MonthlyPaymentController@getMonthlyPaidPayments');
-Route::get('monthly-payment/student-payment/due/{studentPaymentId}', 'StudentPayments\MonthlyPaymentController@getMonthlyDuePayments');
+Route::get('monthly-payment/student-payment/paid/{studentId}', 'StudentPayments\MonthlyPaymentController@getMonthlyPaidPayments');
+Route::get('monthly-payment/student-payment/due/{studentId}', 'StudentPayments\MonthlyPaymentController@getMonthlyDuePayments');
 
 Route::get('student-payment/student/{studentId}', 'StudentPayments\StudentPaymentController@getPaymentsOfStudent');
 Route::get('student-payment-all/student/{studentId}', 'StudentPayments\StudentPaymentController@getAllStudentPayments');
