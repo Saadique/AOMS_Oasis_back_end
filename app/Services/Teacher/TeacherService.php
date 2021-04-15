@@ -112,7 +112,7 @@ class TeacherService extends Service
                             SELECT * from teacher_institute_shares
                             where teacher_id=$teacherId AND monthly_payment_id IN
                             (select id from monthly_payments where year='$year' AND month='$month'
-                             AND status='payed' AND student_payment_id IN
+                             AND status='paid' AND student_payment_id IN
                             (select student_payment_id from payment_lec_associations
                             where lec_student_ass_id IN
                             (Select lecture_student_id from lecture_student
@@ -145,7 +145,7 @@ class TeacherService extends Service
     public function findTeacherTotalMonthlyIncome($teacherId) {
         $result = DB::select("SELECT monthly_payments.month, monthly_payments.year,  SUM(teacher_institute_shares.teacher_amount) as total_amount FROM teacher_institute_shares
                             INNER JOIN monthly_payments ON teacher_institute_shares.monthly_payment_id=monthly_payments.id
-                            WHERE monthly_payments.status='payed' AND teacher_institute_shares.teacher_id=$teacherId
+                            WHERE monthly_payments.status='paid' AND teacher_institute_shares.teacher_id=$teacherId
                             GROUP BY monthly_payments.month, monthly_payments.year;");
 
         return $result;
@@ -154,7 +154,7 @@ class TeacherService extends Service
     public function findTeacherTotalMonthlyIncomeForLecture($lectureId, $teacherId) {
         $result = DB::select("SELECT monthly_payments.month, monthly_payments.year, SUM(teacher_institute_shares.teacher_amount) as total_amount FROM teacher_institute_shares
                             INNER JOIN monthly_payments ON teacher_institute_shares.monthly_payment_id=monthly_payments.id
-                            WHERE monthly_payments.status='payed' AND teacher_institute_shares.teacher_id=$teacherId AND
+                            WHERE monthly_payments.status='paid' AND teacher_institute_shares.teacher_id=$teacherId AND
                                   teacher_institute_shares.lecture_id=$lectureId GROUP BY monthly_payments.month, monthly_payments.year;");
 
         return $result;

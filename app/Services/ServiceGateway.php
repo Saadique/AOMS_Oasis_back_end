@@ -19,7 +19,9 @@ use App\Services\Room\RoomService;
 use App\Services\Schedule\ScheduleNotificationService;
 use App\Services\Schedule\ScheduleService;
 use App\Services\Student\StudentService;
+use App\Services\StudentPayments\StudentFeeReportsService;
 use App\Services\StudentPayments\StudentPaymentsService;
+use App\Services\StudentPayments\TeacherRemunerationReportService;
 use App\Services\StudentSchemeLecture\StudentSchemeLectureService;
 use App\Services\Subject\SubjectService;
 use App\Services\Teacher\TeacherService;
@@ -49,6 +51,9 @@ class ServiceGateway
     public $scheduleNotificationService;
     public $lectureLessonService;
     public $userService;
+    public $teacherRemunReportService;
+    public $studentFeeReportService;
+
 
 
     public function __construct(
@@ -73,7 +78,9 @@ class ServiceGateway
         ScheduleNotificationService $scheduleNotificationService,
         LectureLessonsService       $lectureLessonService,
         MediumService               $mediumService,
-        UserService                 $userService)
+        UserService                 $userService,
+        TeacherRemunerationReportService  $teacherReportService,
+        StudentFeeReportsService          $studentFeeReportService)
     {
         $this->courseService                 = $courseService;
         $this->scheduleService               = $scheduleService;
@@ -97,6 +104,8 @@ class ServiceGateway
         $this->lectureLessonService          = $lectureLessonService;
         $this->mediumService                 = $mediumService;
         $this->userService                   = $userService;
+        $this->teacherRemunReportService     = $teacherReportService;
+        $this->studentFeeReportService       = $studentFeeReportService;
     }
 
 }

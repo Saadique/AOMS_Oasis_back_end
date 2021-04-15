@@ -191,3 +191,13 @@ Route::get('users/role/{role}', 'User\UserController@getAllUserInformationByRole
 
 //deactivate and activate account
 Route::get('users/status/{status}/{userId}', 'User\UserController@suspendOrActivateAccount');
+
+//--reports--
+//-student fee reports-
+
+//all records
+Route::get('reports/student_fee/all', 'ReportController@getAllStudentFeeRecords');
+
+//all records by course
+Route::get('reports/student_fee/course/{courseId}', 'ReportController@getAllStudentFeeRecordByCourse');
+

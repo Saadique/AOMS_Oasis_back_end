@@ -45,7 +45,7 @@ class StudentPaymentsService extends Service
                 $monthlyPayment = new MonthlyPayment();
                 $monthlyPayment->student_payment_id = $studentPayment->id;
                 $monthlyPayment->student_id = $studentPayment->student_id;
-                $monthlyPayment->amount = $studentPayment->amount;
+                $monthlyPayment->amount = $studentPayment->payment_amount;
                 $monthlyPayment->month = $month;
                 $monthlyPayment->year = $year;
                 $monthlyPayment->due_date = $lastdate;
@@ -69,7 +69,7 @@ class StudentPaymentsService extends Service
     public function findPaidPayments($studentId) {
         $activeMonthlyPayments = MonthlyPayment::where([
             ['student_id', $studentId],
-            ['status', 'payed']
+            ['status', 'paid']
         ])->with('studentPayment.payment','studentPayment.paymentScheme')->get();
         return $activeMonthlyPayments;
     }
@@ -183,6 +183,8 @@ class StudentPaymentsService extends Service
             }
         }
     }
+
+
 
 
 
