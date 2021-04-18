@@ -9,8 +9,17 @@ class RegistrationService extends Service
 {
     public function createRegistration($student,$requestBody) {
         $registration = new Registration();
-        $registration->registration_no = "2021" . Registration::generateRegNo();
-        $registration->registration_fee = 1000;
+        $year = date("Y");
+        $level = "";
+        if ($student->student_type == 'ordinary_level'){
+            $level = "O/L";
+        }else{
+            $level = "A/L";
+        }
+
+        $number = sprintf('%03d',$student->id);
+
+        $registration->registration_no = $year.$number."-".$level;
         $registration->registration_fee = 1000;
         $registration->student_id = $student->id;
         $registration->save();

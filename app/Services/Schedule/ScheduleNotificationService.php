@@ -23,7 +23,7 @@ class ScheduleNotificationService extends Service
                              ORDER BY created_at DESC");
 
         $notifications = DB::select("select lectures.name as lecture_name, rooms.name as room_name, daily_schedules.date,
-                                           daily_schedules.start_time,daily_schedules.end_time, daily_schedules.room_id, daily_schedules.lecture_id, teacher_notifications.message
+                                           daily_schedules.start_time,daily_schedules.end_time, daily_schedules.room_id, daily_schedules.lecture_id, teacher_notifications.action
                                             from daily_schedules inner join teacher_notifications on daily_schedules.id=teacher_notifications.daily_schedule_id inner join lectures on
                                            lectures.id=daily_schedules.lecture_id INNER JOIN rooms ON rooms.id=daily_schedules.room_id");
 
@@ -40,7 +40,7 @@ class ScheduleNotificationService extends Service
                             ORDER BY created_at DESC ");
 
         $notifications = DB::select("select lectures.name as lecture_name, rooms.name as room_name, daily_schedules.date,
-                                           daily_schedules.start_time,daily_schedules.end_time, daily_schedules.room_id, daily_schedules.lecture_id, student_notifications.message
+                                           daily_schedules.start_time,daily_schedules.end_time, daily_schedules.room_id, daily_schedules.lecture_id, student_notifications.action
                                             from daily_schedules inner join student_notifications on daily_schedules.id=student_notifications.daily_schedule_id inner join lectures on
                                            lectures.id=daily_schedules.lecture_id INNER JOIN rooms ON rooms.id=daily_schedules.room_id");
 

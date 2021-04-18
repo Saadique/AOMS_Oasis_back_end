@@ -28,4 +28,8 @@ class Service
         if ($f > $t) $t->modify('+1 day');
         return ($f <= $i && $i <= $t) || ($f <= $i->modify('+1 day') && $i <= $t);
     }
+
+    public function check_time_overlap($start_time1, $end_time1, $start_time2, $end_time2) {
+        return (($start_time1) <=  ($end_time2) && ($start_time2) < ($end_time1) ? true : false);
+    }
 }

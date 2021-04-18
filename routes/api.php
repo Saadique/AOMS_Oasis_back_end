@@ -192,12 +192,29 @@ Route::get('users/role/{role}', 'User\UserController@getAllUserInformationByRole
 //deactivate and activate account
 Route::get('users/status/{status}/{userId}', 'User\UserController@suspendOrActivateAccount');
 
+//test mail
+Route::get('test/email','MailController@sendEmail');
+
 //--reports--
 //-student fee reports-
 
 //all records
 Route::get('reports/student_fee/all', 'ReportController@getAllStudentFeeRecords');
 
-//all records by course
+//records by course - all_time
 Route::get('reports/student_fee/course/{courseId}', 'ReportController@getAllStudentFeeRecordByCourse');
 
+//records by course - month
+Route::get('reports/student_fee/course/{courseId}/year/{year}/month/{month}', 'ReportController@getAllStudentFeeRecordForCourseByMonth');
+
+//records by course - date
+Route::get('reports/student_fee/course/{courseId}/from/{from_date}/to/{to_date}', 'ReportController@getAllStudentFeeRecordForCourseByDate');
+
+//records by teacher - all_time
+Route::get('reports/student_fee/teacher/{teacherId}', 'ReportController@getAllStudentFeeRecordByTeacher');
+
+//records by teacher - month
+Route::get('reports/student_fee/teacher/{teacherId}/year/{year}/month/{month}', 'ReportController@getAllStudentFeeRecordForTeacherByMonth');
+
+//records by teacher - date
+Route::get('reports/student_fee/teacher/{teacherId}/from/{from_date}/to/{to_date}', 'ReportController@getAllStudentFeeRecordForTeacherByDate');

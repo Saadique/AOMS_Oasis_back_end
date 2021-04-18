@@ -20,6 +20,16 @@ class StudentService extends Service
     }
 
     public function createStudent($requestBody) {
+
+//        $nicExists = Student::where('nic', $requestBody['nic'])->first();
+//        if ($nicExists) {
+//            return response()->json("NIC Already Exists", 400);
+//        }
+        $emailExists = Student::where('email', $requestBody['email'])->first();
+        if ($emailExists) {
+            return response()->json("Email Already Exists", 400);
+        }
+
         $registerData = [
             'username'  => $requestBody['email'],
             'role_id'   => 2,
@@ -46,6 +56,7 @@ class StudentService extends Service
         $student = Student::findOrFail($requestBody['student_id']);
         try {
             $student->lectures()->attach($requestBody['lecture_id']);
+
         } catch (QueryException $exception){
             return response()->json(['error' => "This lecture is already added to this student", 'message' => $exception->getMessage()],400);
         }

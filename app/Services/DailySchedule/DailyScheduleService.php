@@ -4,6 +4,7 @@
 namespace App\Services\DailySchedule;
 use App\Attendance;
 use App\DailySchedule;
+use App\Lecture;
 use App\ScheduleNotifications;
 use App\Services\Service;
 use App\Student;
@@ -14,11 +15,35 @@ class DailyScheduleService extends Service
 {
     public function createOneTimeSchedule($requestBody)
     {
+        $date = $requestBody['date'];
+        $teacher = Lecture::findOrFail($requestBody['lecture_id'])->teacher;
+
+        $existingTeacherSchedules = DB::select("SELECT * FROM daily_schedules WHERE date='$date'
+                             AND lecture_id IN (SELECT id FROM lectures WHERE teacher_id=$teacher->id)");
+
+        $teacherStartTimeMatch = false;
+        $teacherEndTimeMatch = false;
+        if (count($existingTeacherSchedules)!=0){
+            foreach ($existingTeacherSchedules as $teacherSchedule)
+            {
+                $teacherStartTimeMatch = $this->TimeIsBetweenTwoTimes($teacherSchedule->start_time,
+                    $teacherSchedule->end_time, $requestBody['start_time']);
+
+                $teacherEndTimeMatch = $this->TimeIsBetweenTwoTimes($teacherSchedule->start_time,
+                    $teacherSchedule->end_time, $requestBody['end_time']);
+            }
+        }
+
+        if ($teacherStartTimeMatch or $teacherEndTimeMatch) {
+            return $this->errorResponse("This teacher Has Another lecture at this schedule slot",400);
+        }
+
         $similarSchedules = DB::table('daily_schedules')
             ->where([
                 ['date',$requestBody['date']],
                 ['room_id',$requestBody['room_id']]
             ])->get();
+
         $startTimeMatch = false;
         $endTimeMatch = false;
         if ($similarSchedules != null) {
@@ -112,6 +137,29 @@ class DailyScheduleService extends Service
     }
 
     public function updateSchedule($requestBody, DailySchedule $dailySchedule) {
+
+        $date = $requestBody['date'];
+        $teacher = Lecture::findOrFail($requestBody['lecture_id'])->teacher;
+
+        $existingTeacherSchedules = DB::select("SELECT * FROM daily_schedules WHERE id!=$dailySchedule->id AND date='$date'
+                             AND lecture_id IN (SELECT id FROM lectures WHERE teacher_id=$teacher->id)");
+
+        $teacherStartTimeMatch = false;
+        $teacherEndTimeMatch = false;
+        if (count($existingTeacherSchedules)!=0){
+            foreach ($existingTeacherSchedules as $teacherSchedule)
+            {
+                $teacherStartTimeMatch = $this->TimeIsBetweenTwoTimes($teacherSchedule->start_time,
+                    $teacherSchedule->end_time, $requestBody['start_time']);
+
+                $teacherEndTimeMatch = $this->TimeIsBetweenTwoTimes($teacherSchedule->start_time,
+                    $teacherSchedule->end_time, $requestBody['end_time']);
+            }
+        }
+
+        if ($teacherStartTimeMatch or $teacherEndTimeMatch) {
+            return $this->errorResponse("This teacher Has Another lecture at this schedule slot",400);
+        }
 
         $similarSchedules = DB::table('daily_schedules')
             ->where([

@@ -20,6 +20,7 @@ class CreateStudentsTable extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('name');
             $table->string('student_type');
+            $table->string('gender')->nullable();
             $table->string('school_name')->nullable();
             $table->string('NIC')->nullable();
             $table->integer('mobile_no')->nullable();

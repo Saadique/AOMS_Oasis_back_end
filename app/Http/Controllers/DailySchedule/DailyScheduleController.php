@@ -55,11 +55,19 @@ class DailyScheduleController extends ApiController
 
     public function destroy(DailySchedule $dailySchedule)
     {
-        $dailySchedule->delete();
-        $notification = new ScheduleNotifications();
-        $notification->daily_schedule_id = $dailySchedule->id;
-        $notification->message = "delete";
-        $notification->save();
-        return $this->showOne($dailySchedule);
+        if ($dailySchedule->status != 'completed') {
+            $notifications = ScheduleNotifications::where('daily_schedule_id', $dailySchedule->id)->get();
+            foreach ($notifications as $notification) {
+                $notification->delete();
+            }
+            $dailySchedule->delete();
+//        $notification = new ScheduleNotifications();
+//        $notification->daily_schedule_id = $dailySchedule->id;
+//        $notification->action = "delete";
+//        $notification->save();
+            return $this->showOne($dailySchedule);
+        } else {
+            return response()->json("Cannot Delete Completed Schedule", 400);
+        }
     }
 }
