@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Room;
 
+use App\Course;
 use App\Http\Controllers\ApiController;
 use App\Room;
 use App\Services\ServiceGateway;
@@ -21,6 +22,11 @@ class RoomController extends ApiController
         return Room::all();
     }
 
+    public function getActiveRooms() {
+        $rooms = Room::where('status','active')->get();
+        return $rooms;
+    }
+
     public function store(Request $request)
     {
         $requstBody = $request->all();
@@ -37,6 +43,13 @@ class RoomController extends ApiController
     {
         $requestBody = $request->all();
         return $this->serviceGateway->roomService->updateRoom($requestBody, $room);
+    }
+
+    public function changeDeleteStatus($roomId,$status) {
+        $room = Room::findOrFail($roomId);
+        $room->status = $status;
+        $room->save();
+        return $room;
     }
 
     public function destroy(Room $room)

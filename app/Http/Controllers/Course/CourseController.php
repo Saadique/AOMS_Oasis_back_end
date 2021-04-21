@@ -47,6 +47,7 @@ class CourseController extends ApiController
 
     public function update(Request $request, Course $course)
     {
+        $request = $request->all();
         return $this->serviceGateway->courseService->updateCourse($request,$course);
     }
 
@@ -56,7 +57,10 @@ class CourseController extends ApiController
 
     }
 
-    public function changeDeleteStatus($courseId, $status) {
-
+    public function changeDeleteStatus($status, $courseId) {
+        $course = Course::findOrFail($courseId);
+        $course->status = $status;
+        $course->save();
+        return $course;
     }
 }

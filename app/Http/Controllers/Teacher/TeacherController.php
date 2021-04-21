@@ -67,7 +67,8 @@ class TeacherController extends ApiController
 
     public function update(Request $request, Teacher $teacher)
     {
-        //
+        $requestBody = $request->all();
+        return $this->serviceGateway->teacherService->updateTeacher($requestBody,$teacher);
     }
 
     public function destroy(Teacher $teacher)

@@ -63,24 +63,18 @@ class PaymentController extends ApiController
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Payment  $payment
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, Payment $payment)
     {
-        //
+        $request = $request->all();
+        $payment->student_fee = $request['student_fee'];
+        $payment->fixed_institute_amount = $request['fixed_institute_amount'];
+        $payment->teacher_percentage = $request['teacher_percentage'];
+        $payment->save();
+        return $payment;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Payment  $payment
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(Payment $payment)
     {
         //

@@ -15,8 +15,6 @@ class LectureService extends Service
 
     public $paymentService;
 
-
-
     public function __construct()
     {
         $this->paymentService = new PaymentService();
@@ -56,24 +54,5 @@ class LectureService extends Service
     public function findAllStudentsByLecture($lectureId) {
         $lecture = Lecture::findOrFail($lectureId);
         return $lecture->students;
-    }
-
-    public function deactivateLecture($lectureId) {
-        $lecture = Lecture::findOrFail($lectureId);
-        $lecture->status = "deleted";
-        $lecture->update();
-
-        $schedule = Schedule::where('lecture_id', $lectureId)->first();
-        $schedule->status = "deleted";
-        $schedule->update();
-
-        $payment  = Payment::where('lecture_id', $lectureId)->first();
-        $payment->status = "deleted";
-        $payment->update();
-
-        DB::update("UPDATE daily_schedules SET status='deleted' WHERE lecture_id=$lecture->id");
-        DB::update("UPDATE lecture_student SET status='deleted' WHERE lecture_id=$lecture->id");
-
-
     }
 }

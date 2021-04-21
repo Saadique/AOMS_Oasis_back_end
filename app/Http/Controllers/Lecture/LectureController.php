@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Lecture;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Lecture\LectureStoreRequest;
 use App\Lecture;
+use App\Room;
 use App\Services\ServiceGateway;
 use Illuminate\Http\Request;
 
@@ -23,6 +24,11 @@ class LectureController extends ApiController
     {
         $lectures = Lecture::all();
         return $this->showAll($lectures);
+    }
+
+    public function getActiveLectures() {
+        $lectures = Lecture::where('status','active')->get();
+        return $lectures;
     }
 
     public function store(LectureStoreRequest $request)
@@ -62,9 +68,11 @@ class LectureController extends ApiController
         return $this->serviceGateway->lectureService->updateLecture($requestBody, $lecture);
     }
 
-
-    public function deactivate($lectureId) {
-
+    public function changeDeleteStatus($lectureId,$status) {
+        $lecture = Lecture::findOrFail($lectureId);
+        $lecture->status = $status;
+        $lecture->save();
+        return $lecture;
     }
 
     public function destroy(Lecture $lecture)

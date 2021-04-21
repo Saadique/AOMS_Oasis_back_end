@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\LessonMaterials;
 use App\Services\ServiceGateway;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Input\Input;
 
 class LessonMaterialsController extends Controller
@@ -50,11 +51,39 @@ class LessonMaterialsController extends Controller
     }
 
 
+    public function updateLectureMaterial(Request $request, $materialId) {
+        $file = $request->file('file');
+        $uniqueName = uniqid();
+        $extension = $file->extension();
+        $fileName = $uniqueName . "." . $extension;
+        $uploadPath = $request->file('file')->move(public_path("/lecture_materials"), $fileName);
+        $filePath = '/lecture_materials/' . $fileName;
 
 
-    public function update(Request $request, LessonMaterials $lessonMaterials)
+        $material = LessonMaterials::findOrFail($materialId);
+        $material->file_extension = $extension;
+        $material->path = $filePath;
+        $material->save();
+
+        return response()->json(['message' => "SUCCESSFUL"], 200);
+    }
+
+    public function updateLectureMaterialInfo(Request $request, $lessonMaterialId)
     {
-        return $this->serviceGateway->lectureLessonService->updateLectureMaterial($request, $lessonMaterials);
+        $request = $request->all();
+        $exists = LessonMaterials::where([
+            ['file_name',$request['file_name']],
+            ['id','!=',$lessonMaterialId]
+        ])->first();
+
+        if ($exists != null){
+            return response()->json(['message' => 'FILE_WITH_SAME_NAME_EXISTS'], 400);
+        }
+
+        $lessonMaterial = LessonMaterials::findOrFail($lessonMaterialId);
+        $lessonMaterial->file_name = $request['file_name'];
+        $lessonMaterial->save();
+        return $lessonMaterial;
     }
 
     public function getAllMaterialsWithLessons($lecture_id) {
@@ -62,8 +91,10 @@ class LessonMaterialsController extends Controller
     }
 
 
-    public function destroy(LessonMaterials $lessonMaterials)
+    public function destroy(LessonMaterials $lessons_material)
     {
-        //
+
+        DB::delete("DELETE FROM lesson_materials WHERE id=$lessons_material->id");
+        return response()->json(['message' => "SUCCESSFUL"], 200);
     }
 }

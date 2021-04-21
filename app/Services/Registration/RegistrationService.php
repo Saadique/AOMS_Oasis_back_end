@@ -26,5 +26,6 @@ class RegistrationService extends Service
 
         $student->registration_no = $registration->registration_no;
         $student->save();
+        return $student;
     }
 }

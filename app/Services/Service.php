@@ -4,8 +4,10 @@
 namespace App\Services;
 
 
+use App\Mail\PasswordIssuer;
 use App\Traits\ApiResponser;
 use DateTime;
+use Illuminate\Support\Facades\Mail;
 
 class Service
 {
@@ -31,5 +33,13 @@ class Service
 
     public function check_time_overlap($start_time1, $end_time1, $start_time2, $end_time2) {
         return (($start_time1) <=  ($end_time2) && ($start_time2) < ($end_time1) ? true : false);
+    }
+
+    public function sendPasswordMail($email,$username, $password) {
+        $data = [
+            'username'=> $username,
+            'password'=>$password
+        ];
+        Mail::to($email)->send(new PasswordIssuer($data));
     }
 }

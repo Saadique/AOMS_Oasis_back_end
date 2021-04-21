@@ -15,12 +15,12 @@ class PaymentSchemeService extends Service
     }
 
     public function findRelevantSchema($requestBody) {
-        $paymentScheme = Payment_Scheme::where([
-            ['no_of_subjects', $requestBody['no_of_lectures']],
-            ['class_level', $requestBody['class_level']]
-        ])->first();
+//        $paymentScheme = Payment_Scheme::where([
+//            ['no_of_subjects', $requestBody['no_of_lectures']],
+//            ['class_level', $requestBody['class_level']]
+//        ])->first();
 
-        if ($paymentScheme == null or $requestBody['class_level'] == "ordinary_level"){
+//        if ($paymentScheme == null or $requestBody['class_level'] == "ordinary_level"){
             $payments = [];
             $lectureIds = $requestBody['lecture_ids'];
 
@@ -37,13 +37,13 @@ class PaymentSchemeService extends Service
                 "scheme" => null,
                 "payments" => $payments
             ]);
-        }
+//        }
 
-        return response()->json([
-            "message" => "Payment Scheme Available",
-            "scheme" => $paymentScheme,
-            "payments" => null,
-            "lecture_ids" => $requestBody['lecture_ids']
-        ]);
+//        return response()->json([
+//            "message" => "Payment Scheme Available",
+//            "scheme" => $paymentScheme,
+//            "payments" => null,
+//            "lecture_ids" => $requestBody['lecture_ids']
+//        ]);
     }
 }

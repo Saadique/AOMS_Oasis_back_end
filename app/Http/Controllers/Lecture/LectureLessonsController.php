@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Lecture;
 
+use App\Course;
 use App\Http\Controllers\Controller;
 use App\LectureLessons;
 use App\Services\ServiceGateway;
@@ -51,9 +52,29 @@ class LectureLessonsController extends Controller
     }
 
 
-    public function update(Request $request, LectureLessons $lectureLessons)
+    public function update(Request $request, LectureLessons $lesson)
     {
-        //
+        $existingLesson = LectureLessons::where([
+            ['lecture_id', $request['lecture_id']],
+            ['name',$request['name']],
+            ['id','!=',$lesson->id]
+        ])->first();
+
+        if ($existingLesson) {
+            return response("LESSON_EXISTS_WITH_SAME_NAME", 400);
+        }
+        $lesson->name = $request['name'];
+        $lesson->description = $request['description'];
+        $lesson->save();
+
+        return $lesson;
+    }
+
+    public function changeDeleteStatus($lesson_id, $status) {
+        $lesson = LectureLessons::findOrFail($lesson_id);
+        $lesson->status = $status;
+        $lesson->save();
+        return $lesson;
     }
 
 

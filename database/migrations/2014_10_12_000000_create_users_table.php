@@ -16,6 +16,8 @@ class CreateUsersTable extends Migration
             $table->string('role_name');
             $table->unsignedBigInteger('role_id');
             $table->string('status')->nullable()->default('active');
+            $table->string('initial_password')->nullable();
+            $table->string('reset_password_code')->nullable();
             $table->rememberToken();
 
             $table->foreign('role_id')

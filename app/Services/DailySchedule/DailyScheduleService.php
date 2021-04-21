@@ -5,11 +5,13 @@ namespace App\Services\DailySchedule;
 use App\Attendance;
 use App\DailySchedule;
 use App\Lecture;
+use App\Mail\ScheduleNotification;
 use App\ScheduleNotifications;
 use App\Services\Service;
 use App\Student;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class DailyScheduleService extends Service
 {
@@ -68,12 +70,13 @@ class DailyScheduleService extends Service
             $endTime     = $dailySchedule->end_time;
 
 
-            $email = "A new lecture schedule was created for $lectureName <br>
-                        Room - $roomName. <br>
-                        Date - $date. <br>
-                        From - $startTime. <br>
-                        To   - $endTime. <br>";
+            $messagea = "A new lecture schedule was created for $lectureName
+                        Room - $roomName.
+                        Date - $date.
+                        From - $startTime.
+                        To   - $endTime.";
 
+            $message="sasa";
 
 
             $notification = new ScheduleNotifications();
@@ -81,7 +84,16 @@ class DailyScheduleService extends Service
             $notification->action = "create";
             $notification->save();
 
-//            mail('sadiqzufer@gmail.com','Class Creation', 'A new class was created');
+            Mail::to($teacher->email)->send(new ScheduleNotification($message));
+
+            $studentEmails = DB::select("SELECT email from students where id IN
+                            (SELECT student_id from lecture_student where lecture_id IN
+                            (SELECT lecture_id from daily_schedules where id=$dailySchedule->id))");
+
+            foreach ($studentEmails as $email){
+                Mail::to($email)->send(new ScheduleNotification($message));
+            }
+
             return $this->showOne($dailySchedule);
         } else {
             return $this->errorResponse("THIS_TIME_IS_NOT_FREE",400);
@@ -138,72 +150,94 @@ class DailyScheduleService extends Service
 
     public function updateSchedule($requestBody, DailySchedule $dailySchedule) {
 
-        $date = $requestBody['date'];
-        $teacher = Lecture::findOrFail($requestBody['lecture_id'])->teacher;
+        if ($dailySchedule->status != 'completed') {
 
-        $existingTeacherSchedules = DB::select("SELECT * FROM daily_schedules WHERE id!=$dailySchedule->id AND date='$date'
+            $date = $requestBody['date'];
+            $teacher = Lecture::findOrFail($requestBody['lecture_id'])->teacher;
+
+            $existingTeacherSchedules = DB::select("SELECT * FROM daily_schedules WHERE id!=$dailySchedule->id AND date='$date'
                              AND lecture_id IN (SELECT id FROM lectures WHERE teacher_id=$teacher->id)");
 
-        $teacherStartTimeMatch = false;
-        $teacherEndTimeMatch = false;
-        if (count($existingTeacherSchedules)!=0){
-            foreach ($existingTeacherSchedules as $teacherSchedule)
-            {
-                $teacherStartTimeMatch = $this->TimeIsBetweenTwoTimes($teacherSchedule->start_time,
-                    $teacherSchedule->end_time, $requestBody['start_time']);
+            $teacherStartTimeMatch = false;
+            $teacherEndTimeMatch = false;
+            if (count($existingTeacherSchedules) != 0) {
+                foreach ($existingTeacherSchedules as $teacherSchedule) {
+                    $teacherStartTimeMatch = $this->TimeIsBetweenTwoTimes($teacherSchedule->start_time,
+                        $teacherSchedule->end_time, $requestBody['start_time']);
 
-                $teacherEndTimeMatch = $this->TimeIsBetweenTwoTimes($teacherSchedule->start_time,
-                    $teacherSchedule->end_time, $requestBody['end_time']);
+                    $teacherEndTimeMatch = $this->TimeIsBetweenTwoTimes($teacherSchedule->start_time,
+                        $teacherSchedule->end_time, $requestBody['end_time']);
+                }
             }
-        }
 
-        if ($teacherStartTimeMatch or $teacherEndTimeMatch) {
-            return $this->errorResponse("This teacher Has Another lecture at this schedule slot",400);
-        }
-
-        $similarSchedules = DB::table('daily_schedules')
-            ->where([
-                ['id','!=', $dailySchedule->id],
-                ['date',$requestBody['date']],
-                ['room_id',$requestBody['room_id']]
-            ])->get();
-
-        $startTimeMatch = false;
-        $endTimeMatch = false;
-
-        if ($similarSchedules != null) {
-            foreach ($similarSchedules as $similarSchedule) {
-                $startTimeMatch = $this->TimeIsBetweenTwoTimes($similarSchedule->start_time,
-                    $similarSchedule->end_time, $requestBody['start_time']);
-
-                $endTimeMatch = $this->TimeIsBetweenTwoTimes($similarSchedule->start_time,
-                    $similarSchedule->end_time, $requestBody['end_time']);
+            if ($teacherStartTimeMatch or $teacherEndTimeMatch) {
+                return $this->errorResponse("This teacher Has Another lecture at this schedule slot", 400);
             }
-        }
 
-        if (!($startTimeMatch or $endTimeMatch))
-        {
+            $similarSchedules = DB::table('daily_schedules')
+                ->where([
+                    ['id', '!=', $dailySchedule->id],
+                    ['date', $requestBody['date']],
+                    ['room_id', $requestBody['room_id']]
+                ])->get();
 
+            $startTimeMatch = false;
+            $endTimeMatch = false;
 
-            DB::update(
-                'update daily_schedules
+            if ($similarSchedules != null) {
+                foreach ($similarSchedules as $similarSchedule) {
+                    $startTimeMatch = $this->TimeIsBetweenTwoTimes($similarSchedule->start_time,
+                        $similarSchedule->end_time, $requestBody['start_time']);
+
+                    $endTimeMatch = $this->TimeIsBetweenTwoTimes($similarSchedule->start_time,
+                        $similarSchedule->end_time, $requestBody['end_time']);
+                }
+            }
+
+            if (!($startTimeMatch or $endTimeMatch)) {
+                $oldDate = $dailySchedule->date;
+                DB::update(
+                    'update daily_schedules
                       set date = ?,
                       start_time = ?,
                       end_time = ?,
                       room_id = ?
                       where id = ?',
-                [$requestBody->date, $requestBody->start_time, $requestBody->end_time, $requestBody->room_id,
-                $dailySchedule->id]);
+                    [$requestBody->date, $requestBody->start_time, $requestBody->end_time, $requestBody->room_id,
+                        $dailySchedule->id]);
 
+                $lecture = $dailySchedule->lecture;
+                $dailyScheduleUpdated = DailySchedule::findOrFail($dailySchedule->id);
 
-            $notification = new ScheduleNotifications();
-            $notification->daily_schedule_id = $dailySchedule->id;
-            $notification->action = "update";
-            $notification->save();
-//            mail('sadiqzufer@gmail.com','Class Creation', 'A new class was created');
-            return $this->showOne($dailySchedule);
+                $roomName = $dailyScheduleUpdated->room->name;
+                $messages = "The $lecture->name lecture on $oldDate, was updated to
+                        Room - $roomName.
+                        Date - $dailyScheduleUpdated->date.
+                        From - $dailyScheduleUpdated->start_time.
+                        To   - $dailyScheduleUpdated->end_time.";
+
+                $message="sasa";
+                $notification = new ScheduleNotifications();
+                $notification->daily_schedule_id = $dailySchedule->id;
+                $notification->old_date = $oldDate;
+                $notification->action = "update";
+                $notification->save();
+
+                Mail::to($teacher->email)->send(new ScheduleNotification($message));
+
+                $studentEmails = DB::select("SELECT email from students where id IN
+                            (SELECT student_id from lecture_student where lecture_id IN
+                            (SELECT lecture_id from daily_schedules where id=$dailySchedule->id))");
+
+                foreach ($studentEmails as $email) {
+                    Mail::to($email)->send(new ScheduleNotification($message));
+                }
+                return $this->showOne($dailySchedule);
+            } else {
+                return $this->errorResponse("THIS_TIME_IS_NOT_FREE", 400);
+            }
         } else {
-            return $this->errorResponse("THIS_TIME_IS_NOT_FREE",400);
+            return response()->json("Cannot Update Completed Schedule", 400);
         }
     }
 

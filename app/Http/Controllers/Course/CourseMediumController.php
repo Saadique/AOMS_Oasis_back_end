@@ -58,6 +58,12 @@ class CourseMediumController extends ApiController
         return response()->json($withCourse,200);
     }
 
+    public function changeDeleteStatus($status, $courseMediumId) {
+        $courseMedium = CourseMedium::findOrFail($courseMediumId);
+        $courseMedium->status = $status;
+        $courseMedium->save();
+        return $courseMedium;
+    }
 
 
     public function update(Request $request, CourseMedium $courseMedium)

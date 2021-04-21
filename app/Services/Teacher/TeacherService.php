@@ -24,24 +24,58 @@ class TeacherService extends Service
 
 
     public function createTeacher($requestBody) {
+
+        $nicExists = User::where('username', $requestBody['nic'])->first();
+        if ($nicExists){
+            return response()->json(['message'=>"NIC Already Exists"], 400);
+        }
+        $emailExists = Teacher::where('email', $requestBody['email'])->first();
+        if ($emailExists){
+            return response()->json(['message'=>"Email Already Exists"], 400);
+        }
+
         $randomPassword = Str::random(8);
 
         $registerData = [
             'username'  => $requestBody['nic'],
             'role_id'   => 3,
             'role_name' => 'Teacher',
-            'password'  => 12345,
-            'password_confirmation' => 12345
+            'password'  => $randomPassword,
+            'password_confirmation' => $randomPassword
         ];
 
         $registerData['password'] = Hash::make($registerData['password']);
         $registerData['remember_token'] = Str::random(10);
 
         $user = User::create($registerData);
+        $user->initial_password = $randomPassword;
+        $this->sendPasswordMail($requestBody['email'], $user->username, $randomPassword);
         $token = $user->createToken('Laravel Password Grant Client')->accessToken;
         $requestBody['user_id'] = $user->id;
         $teacher = Teacher::create($requestBody);
+
+        $user->initial_password = $randomPassword;
+        $user->save();
+        $this->sendPasswordMail($requestBody['email'], $user->username, $randomPassword);
         return $this->showOne($teacher);
+    }
+
+    public function updateTeacher($requestBody, $teacher) {
+        $emailExists = Teacher::where([
+            ['email', $requestBody['email']],
+            ['id', '!=', $teacher->id]
+        ])->first();
+        if ($emailExists){
+            return response()->json(['message'=>"Email Already Exists"], 400);
+        }
+
+        $teacher->email = $requestBody['email'];
+        $teacher->mobile_no = $requestBody['mobile_no'];
+        $teacher->address = $requestBody['address'];
+        $teacher->name = $requestBody['name'];
+        $teacher->save();
+
+        return $teacher;
     }
 
     public function findAllLecturesByTeacher($teacherId){
@@ -93,10 +127,10 @@ class TeacherService extends Service
     public function findMonthlyRemunerations($lectureId, $year, $month) {
         $lec_stud_assc2 = DB::statement("Create or replace view teacher_monthly_payments AS
                                             select * from monthly_payments where year='$year' AND month='$month' AND student_payment_id IN
-                                            (select student_payment_id from payment_lec_associations
-                                            where lec_student_ass_id IN
-                                            (Select lecture_student_id from lecture_student
-                                            where lecture_id=$lectureId AND status='active'))");
+                                            (select id from student__payments
+                                            where payment_id =
+                                            (Select id from payments
+                                            where lecture_id=$lectureId))");
 
         $lec_stud_assc3 = DB::select("select name, registration_no, teacher_monthly_payments.status, student__payments.payment_type, year, month
                                            FROM teacher_monthly_payments inner join students ON
@@ -113,9 +147,9 @@ class TeacherService extends Service
                             where teacher_id=$teacherId AND monthly_payment_id IN
                             (select id from monthly_payments where year='$year' AND month='$month'
                              AND status='paid' AND student_payment_id IN
-                            (select student_payment_id from payment_lec_associations
-                            where lec_student_ass_id IN
-                            (Select lecture_student_id from lecture_student
+                            (select id from student__payments
+                            where payment_id =
+                            (Select id from payments
                             where lecture_id=$lectureId)))");
 
         $paid_students =

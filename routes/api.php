@@ -34,7 +34,9 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     // public routes
     Route::post('user/login', 'User\UserController@login')->name('login.api');
     Route::post('user/register', 'User\UserController@register')->name('register.api');
-
+    Route::get('users/reset_password/mail_code/{username}', 'User\UserController@mailResetPasswordCode');
+    Route::post('users/reset_password/code', 'User\UserController@validateCode');
+    Route::post('users/reset_password/reset', 'User\UserController@resetPassword');
 });
 
 Route::middleware('auth:api')->group(function () {
@@ -42,11 +44,11 @@ Route::middleware('auth:api')->group(function () {
     Route::post('user/details', 'User\UserController@details');
 //    Route::get('teacher/lectures/{teacherId}', 'Teacher\TeacherController@getAllLecturesOfTeacher')
 //        ->middleware('api.admin');
-    Route::resource('courses', 'Course\CourseController', ['except' => ['create', 'edit']]);
+
 
 });
 
-
+Route::resource('courses', 'Course\CourseController', ['except' => ['create', 'edit']]);
 Route::resource('subjects', 'Subject\SubjectController', ['except' => ['create', 'edit']]);
 Route::resource('mediums', 'Medium\MediumController', ['except' => ['create', 'edit']]);
 Route::resource('lectures', 'Lecture\LectureController', ['except' => ['create', 'edit']]);
@@ -75,8 +77,11 @@ Route::get('mediums/all/mediums', 'Medium\MediumController@getAllMediums');
 
 Route::get('mediums/status/activate/{mediumId}', 'Medium\MediumController@activateMedium');
 
-//courses
-Route::get('courses/status/{status}/${courseId}', 'Course\CourseController@changeDeleteStatus');
+//courses delete
+Route::get('courses/status/{status}/{courseId}', 'Course\CourseController@changeDeleteStatus');
+
+//course medium delete
+Route::get('course_mediums/status/{status}/{courseId}', 'Course\CourseMediumController@changeDeleteStatus');
 
 Route::get('courses/all/courses', 'Course\CourseController@getAllCourses');
 
@@ -97,6 +102,7 @@ Route::get('lectures/course_medium/{courseMediumId}', 'Lecture\LectureController
 //all lec
 Route::get('lectures/course_medium/{courseMediumId}/all', 'Lecture\LectureController@getAllLecByCourseMedium');
 
+
 Route::get('lectures/subjects/{subjectId}', 'Lecture\LectureController@getLecturesBySubject');
 
 Route::get('schedules/lecture/{lectureId}', 'Schedule\ScheduleController@getSchedulesByLecture');
@@ -116,7 +122,10 @@ Route::get('payment/test2', 'Payment\PaymentStudentController@findPayed');
 
 Route::get('lecture/{lectureId}/students', 'Lecture\LectureController@getAllStudentsByLecture');
 
+
 Route::post('students/lecture/add', 'Student\StudentController@addLecture');
+
+Route::post('students/lecture/remove', 'Student\StudentController@removeLecture');
 
 Route::get('payment/student/{studentId}', 'Payment\PaymentStudentController@getPaymentsOfStudent');
 
@@ -132,6 +141,7 @@ Route::post('payment-schemes/student/lecture', 'StudentSchemeLecture\StudentSche
 Route::get('monthly-payment/student-payment/payable/{studentPaymentId}', 'StudentPayments\MonthlyPaymentController@getMonthlyPayments');
 Route::get('monthly-payment/student-payment/paid/{studentId}', 'StudentPayments\MonthlyPaymentController@getMonthlyPaidPayments');
 Route::get('monthly-payment/student-payment/due/{studentId}', 'StudentPayments\MonthlyPaymentController@getMonthlyDuePayments');
+Route::get('monthly-payment/student-payment/check_due', 'StudentPayments\MonthlyPaymentController@changeStatusInDue');
 
 Route::get('student-payment/student/{studentId}', 'StudentPayments\StudentPaymentController@getPaymentsOfStudent');
 Route::get('student-payment-all/student/{studentId}', 'StudentPayments\StudentPaymentController@getAllStudentPayments');
@@ -175,6 +185,8 @@ Route::get('attendances/lecture/date/{lecture_id}/{date}', 'Attendance\Attendanc
 //get lessons by lecture
 Route::get('lessons/lecture/{lecture_id}', 'Lecture\LectureLessonsController@getLessonsByLecture');
 
+//lesson delete status
+Route::get('lessons/status/{lesson_id}/{status}','Lecture\LectureLessonsController@changeDeleteStatus');
 
 //get lecture materials by lesson
 Route::get('lessons_materials/lesson/{lesson_id}', 'Lecture\LessonMaterialsController@getMaterialsByLesson');
@@ -185,6 +197,14 @@ Route::post('lessons_materials/file', 'Lecture\LessonMaterialsController@downloa
 
 //get all lecture materials with lessons
 Route::get('lesson_materials/lesson/lecture/{lecture_id}','Lecture\LessonMaterialsController@getAllMaterialsWithLessons' );
+
+//lesson material info update
+Route::put('lesson_materials/info/{material_id}','Lecture\LessonMaterialsController@updateLectureMaterialInfo' );
+
+//lesson material update
+Route::post('lesson_materials/material/{materialId}','Lecture\LessonMaterialsController@updateLectureMaterial');
+
+
 
 //users
 Route::get('users/role/{role}', 'User\UserController@getAllUserInformationByRole');
@@ -198,8 +218,17 @@ Route::get('test/email','MailController@sendEmail');
 //--reports--
 //-student fee reports-
 
-//all records
+
+//all records - all time
 Route::get('reports/student_fee/all', 'ReportController@getAllStudentFeeRecords');
+
+//all records - month
+Route::get('reports/student_fee/all/year/{year}/month/{month}', 'ReportController@getAllStudentFeeRecordsByMonth');
+
+//all records - date
+Route::get('reports/student_fee/all/from/{fromDate}/to/{toDate}', 'ReportController@getAllStudentFeeRecordsByDate');
+
+
 
 //records by course - all_time
 Route::get('reports/student_fee/course/{courseId}', 'ReportController@getAllStudentFeeRecordByCourse');
@@ -210,6 +239,8 @@ Route::get('reports/student_fee/course/{courseId}/year/{year}/month/{month}', 'R
 //records by course - date
 Route::get('reports/student_fee/course/{courseId}/from/{from_date}/to/{to_date}', 'ReportController@getAllStudentFeeRecordForCourseByDate');
 
+
+
 //records by teacher - all_time
 Route::get('reports/student_fee/teacher/{teacherId}', 'ReportController@getAllStudentFeeRecordByTeacher');
 
@@ -218,3 +249,22 @@ Route::get('reports/student_fee/teacher/{teacherId}/year/{year}/month/{month}', 
 
 //records by teacher - date
 Route::get('reports/student_fee/teacher/{teacherId}/from/{from_date}/to/{to_date}', 'ReportController@getAllStudentFeeRecordForTeacherByDate');
+
+
+Route::get('rooms/status/{roomId}/{status}', 'Room\RoomController@changeDeleteStatus');
+
+Route::get('lectures/status/{lectureId}/{status}', 'Lecture\LectureController@changeDeleteStatus');
+
+
+//records by lecture - all_time
+Route::get('reports/student_fee/lecture/{lectureId}', 'ReportController@getAllStudentFeeRecordByLecture');
+
+//records by lecture - month
+Route::get('reports/student_fee/lecture/{lectureId}/year/{year}/month/{month}', 'ReportController@getAllStudentFeeRecordForLectureByMonth');
+
+//records by lecture - date
+Route::get('reports/student_fee/lecture/{lectureId}/from/{from_date}/to/{to_date}', 'ReportController@getAllStudentFeeRecordForLectureByDate');
+
+
+//dashboard data
+Route::get('admins/dashboard/data', 'User\AdminController@getAdminDashboardData');

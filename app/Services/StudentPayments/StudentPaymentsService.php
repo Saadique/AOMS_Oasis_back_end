@@ -3,6 +3,7 @@ namespace App\Services\StudentPayments;
 
 use App\Lecture;
 use App\MonthlyPayment;
+use App\Payment;
 use App\PaymentLecAssociation;
 use App\Services\Service;
 use App\Student;
@@ -58,10 +59,15 @@ class StudentPaymentsService extends Service
         return $studentPayment;
     }
 
+    public function removeStudentPayments($requestBody) {
+
+    }
+
     public function findMonthlyPayments($studentPaymentId) {
         $activeMonthlyPayments = MonthlyPayment::where([
             ['student_payment_id', $studentPaymentId],
-            ['status', 'active']
+            ['status', 'active'],
+            ['delete_status','active']
         ])->take(2)->get();
         return $activeMonthlyPayments;
     }
@@ -83,13 +89,18 @@ class StudentPaymentsService extends Service
     }
 
     public function findPaymentsOfStudent($studentId) {
-        $student = Student::findOrFail($studentId);
-        return $student->studentPayments()->with('payment','paymentScheme')->get();
+        $studentPayments = Student_Payment::where([
+            ['status','active'],
+            ['student_id', $studentId]
+        ])->with('payment','paymentScheme')->get();
+        return $studentPayments;
     }
 
     public function findAllPaymentsOfStudents($studentId) {
-        $student = Student::findOrFail($studentId);
-        $studentPayments =  $student->studentPayments;
+        $studentPayments = Student_Payment::where([
+            ['status','active'],
+            ['student_id', $studentId]
+        ])->get();
         $result = [];
         foreach ($studentPayments as $payment){
             if ($payment->payment_type == "normal"){
@@ -104,7 +115,8 @@ class StudentPaymentsService extends Service
             if ($payment->payment_type == "scheme"){
                 $lectures = StudentSchemeLecture::where([
                     ['student_id', $studentId],
-                    ['payment_scheme_id', $payment->payment_scheme_id]
+                    ['payment_scheme_id', $payment->payment_scheme_id],
+                    ['status', 'active']
                 ])->with('lecture')->get();
 
                 $obj = [
@@ -147,7 +159,9 @@ class StudentPaymentsService extends Service
 
         if ($studentPayment->payment_type == "scheme") {
             $paymentScheme = $studentPayment->paymentScheme;
-            $stuLecSchemes = StudentSchemeLecture::where('student_id', $monthlyPayment->student_id)->get();
+            $stuLecSchemes = StudentSchemeLecture::where([
+                ['student_id', $monthlyPayment->student_id]
+            ])->get();
             foreach ($stuLecSchemes as $stuLecScheme) {
                 $lecture = $stuLecScheme->lecture;
                 $payment = $lecture->payment;
@@ -173,11 +187,13 @@ class StudentPaymentsService extends Service
 
     public function changeStatusInDue(){
         $today = Carbon::now();
-        echo $today;
-        $activeMonthlyPayments = MonthlyPayment::all();
+        $activeMonthlyPayments = MonthlyPayment::where([
+            ['delete_status','active'],
+            ['status', 'active']
+        ]);
         foreach ($activeMonthlyPayments as $monthlyPayment){
             if ($today<$monthlyPayment->due_date){
-                $monthlyPayment->status = "active";
+                $monthlyPayment->status = "due";
                 $monthlyPayment->save();
                 //alert student
             }

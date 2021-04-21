@@ -15,4 +15,6 @@ class MailController extends Controller
         ];
         Mail::to('zufersaadique@gmail.com')->send(new PasswordIssuer($data));
     }
+
+
 }

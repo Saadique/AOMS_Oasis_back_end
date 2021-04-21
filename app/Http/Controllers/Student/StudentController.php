@@ -35,6 +35,12 @@ class StudentController extends ApiController
         return $this->serviceGateway->studentService->addLecture($requestBody);
     }
 
+    public function removeLecture(Request  $request){
+        $requestBody = $request->all();
+        return $this->serviceGateway->studentService->removeLecture($requestBody);
+    }
+
+
     public function getStudentLectures($studentId){
         return $this->serviceGateway->studentService->findStudentLectures($studentId);
     }
@@ -47,7 +53,7 @@ class StudentController extends ApiController
         DB::update("UPDATE student__payments SET status='deleted' WHERE student_id=$student->id");
         DB::update("UPDATE monthly_payments SET status='deleted' WHERE student_id=$student->id");
         DB::update("UPDATE users SET status='deleted' WHERE user_id=$student->user_id");
-        DB::update("UPDATE student_scheme_lectures SET status='deleted' WHERE student_id=$student->id");
+//        DB::update("UPDATE student_scheme_lectures SET status='deleted' WHERE student_id=$student->id");
         DB::update("UPDATE payment_lec_associations SET status='deleted' WHERE lec_student_ass_id
                         IN(SELECT lecture_student_id FROM lecture_student WHERE student_id=$student->id)");
         return $student;
@@ -62,7 +68,8 @@ class StudentController extends ApiController
 
     public function update(Request $request, Student $student)
     {
-        //
+        $requestBody = $request->all();
+        return $this->serviceGateway->studentService->updateStudent($requestBody, $student);
     }
 
 

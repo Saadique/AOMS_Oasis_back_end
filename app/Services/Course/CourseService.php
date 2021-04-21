@@ -3,6 +3,7 @@ namespace App\Services\Course;
 
 use App\Course;
 use App\CourseMedium;
+use App\Medium;
 use App\Services\Service;
 use App\Services\ServiceGateway;
 use Illuminate\Http\Request;
@@ -42,20 +43,21 @@ class CourseService extends Service
 
     public function updateCourse($request, Course $course)
     {
-        if ($request->has('name')) {
-            $course->name = $request->name;
+        $mediumExists = CourseMedium::where([
+            ['course_id', $course->id],
+            ['medium_id', $request['medium']]
+        ])->first();
+        if ($mediumExists){
+            return response()->json(["message"=> "This medium is already added"], 400);
         }
-        if ($request->has('description')) {
-            $course->description = $request->description;
-        }
-        if ($request->has('mediums')) {
-            $course->mediums()->sync($request['mediums']);
-            $courseMedium = CourseMedium::all()->where('course_id', $course->id);
-            foreach ($courseMedium as $cm) {
-                $mediumShortName = DB::table('mediums')->where('id', $cm->medium_id)->value('short_name');
-                $cm->name = $request->name . " " . $mediumShortName;
-                $cm->update();
-            }
+
+        $course->name = $request['name'];
+        $course->save();
+        $course->mediums()->attach($request['medium']);
+        foreach ($course->mediums as $medium) {
+            $medium->pivot->name = $course->name ." ". $medium->short_name;
+            $medium->pivot->course_medium_type = $course->course_type;
+            $medium->pivot->save();
         }
         return $this->showOne($course);
     }
@@ -74,11 +76,6 @@ class CourseService extends Service
         return response()->json($allCoursesWithMediums,200);
     }
 
-    public function changeDeleteStatus($courseId, $status) {
-        $course = Course::findOrFail($courseId);
-        $course->status = $status;
-        return $course;
-    }
 
 
 }

@@ -53,10 +53,6 @@ class LectureLessonsService extends Service
         return response()->json(['message' => "SUCCESSFUL"], 200);
     }
 
-    public function updateLectureMaterial(Request $request, LessonMaterials $lessonMaterials) {
-        print_r($request['hasFile']);
-    }
-
     public function getLectureMaterialsOfLesson($lesson_id) {
         $lessons = LessonMaterials::where('lesson_id', $lesson_id)->get();
         return $lessons;
@@ -67,7 +63,10 @@ class LectureLessonsService extends Service
     }
 
     public function findAllMaterialsWithLessons($lecture_id) {
-        $lessons = LectureLessons::where('lecture_id', $lecture_id)->get();
+        $lessons = LectureLessons::where([
+            ['lecture_id', $lecture_id],
+            ['status', 'active']
+        ])->get();
 
         $withMaterials = [];
         foreach ($lessons as $lesson) {

@@ -4,7 +4,11 @@ namespace App\Http\Controllers\User;
 
 use App\Admin;
 use App\Http\Controllers\Controller;
+use App\Lecture;
 use App\Services\ServiceGateway;
+use App\Student;
+use App\Teacher;
+use App\User;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -25,6 +29,22 @@ class AdminController extends Controller
     public function create()
     {
         //
+    }
+
+    public function getAdminDashboardData() {
+        $activeStudentsCount = Student::where("status","active")->get()->count();
+        $activeTeacherCount = Teacher::where("status","active")->get()->count();
+        $userAccountsCount = User::where("status","active")->get()->count();
+        $lectureCount = Lecture::where("status","active")->get()->count();
+
+        $countArray = [
+            "student_count"=>$activeStudentsCount,
+            "teacher_count"=>$activeTeacherCount,
+            "user_count"=>$userAccountsCount,
+            "lecture_count"=>$lectureCount
+        ];
+
+        return $countArray;
     }
 
 
