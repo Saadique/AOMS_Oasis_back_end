@@ -40,9 +40,13 @@ class TeacherInstituteShareReport extends Service
                 group by total_teacher_amount, total_institute_amount,total_fixed_institute_amount,student_fee_amount");
 
 
+        $count = DB::select("SELECT COUNT(student_teacher_share.monthly_payment_id) as no_of_payments, payment_name
+                                    FROM `student_teacher_share` GROUP BY payment_name");
+
         $result = [
             "records"=>$records,
-            "summary"=>$summary[0]
+            "summary"=>$summary[0],
+            "count"=>$count
         ];
 
         return $result;
@@ -76,9 +80,14 @@ class TeacherInstituteShareReport extends Service
                         SUM(amount) as student_fee_amount FROM student_teacher_share) B
                 group by total_teacher_amount, total_institute_amount,total_fixed_institute_amount,student_fee_amount");
 
+
+        $count = DB::select("SELECT COUNT(student_teacher_share.monthly_payment_id) as no_of_payments, payment_name
+                                    FROM `student_teacher_share` GROUP BY payment_name");
+
         $result = [
             "records"=>$records,
-            "summary"=>$summary[0]
+            "summary"=>$summary[0],
+            "count"=>$count
         ];
 
         return $result;
@@ -111,9 +120,13 @@ class TeacherInstituteShareReport extends Service
                         SUM(amount) as student_fee_amount FROM student_teacher_share) B
                 group by total_teacher_amount, total_institute_amount,total_fixed_institute_amount,student_fee_amount");
 
+        $count = DB::select("SELECT COUNT(student_teacher_share.monthly_payment_id) as no_of_payments, payment_name
+                                    FROM `student_teacher_share` GROUP BY payment_name");
+
         $result = [
             "records"=>$records,
-            "summary"=>$summary[0]
+            "summary"=>$summary[0],
+            "count"=>$count
         ];
 
         return $result;
@@ -152,9 +165,13 @@ class TeacherInstituteShareReport extends Service
                         SUM(amount) as student_fee_amount FROM student_teacher_share) B
                 group by total_teacher_amount, total_institute_amount,total_fixed_institute_amount,student_fee_amount");
 
+        $count = DB::select("SELECT COUNT(student_teacher_share.monthly_payment_id) as no_of_payments, payment_name
+                                    FROM `student_teacher_share` GROUP BY payment_name");
+
         $result = [
             "records"=>$records,
-            "summary"=>$summary[0]
+            "summary"=>$summary[0],
+            "count"=>$count
         ];
 
         return $result;
@@ -189,9 +206,13 @@ class TeacherInstituteShareReport extends Service
                         SUM(amount) as student_fee_amount FROM student_teacher_share) B
                 group by total_teacher_amount, total_institute_amount,total_fixed_institute_amount,student_fee_amount");
 
+        $count = DB::select("SELECT COUNT(student_teacher_share.monthly_payment_id) as no_of_payments, payment_name
+                                    FROM `student_teacher_share` GROUP BY payment_name");
+
         $result = [
             "records"=>$records,
-            "summary"=>$summary[0]
+            "summary"=>$summary[0],
+            "count"=>$count
         ];
 
         return $result;
@@ -226,9 +247,13 @@ class TeacherInstituteShareReport extends Service
                         SUM(amount) as student_fee_amount FROM student_teacher_share) B
                 group by total_teacher_amount, total_institute_amount,total_fixed_institute_amount,student_fee_amount");
 
+        $count = DB::select("SELECT COUNT(student_teacher_share.monthly_payment_id) as no_of_payments, payment_name
+                                    FROM `student_teacher_share` GROUP BY payment_name");
+
         $result = [
             "records"=>$records,
-            "summary"=>$summary[0]
+            "summary"=>$summary[0],
+            "count"=>$count
         ];
 
         return $result;
@@ -267,9 +292,13 @@ class TeacherInstituteShareReport extends Service
                         SUM(amount) as student_fee_amount FROM student_teacher_share) B
                 group by total_teacher_amount, total_institute_amount,total_fixed_institute_amount,student_fee_amount");
 
+        $count = DB::select("SELECT COUNT(student_teacher_share.monthly_payment_id) as no_of_payments, payment_name
+                                    FROM `student_teacher_share` GROUP BY payment_name");
+
         $result = [
             "records"=>$records,
-            "summary"=>$summary[0]
+            "summary"=>$summary[0],
+            "count"=>$count
         ];
 
         return $result;
@@ -304,9 +333,13 @@ class TeacherInstituteShareReport extends Service
                         SUM(amount) as student_fee_amount FROM student_teacher_share) B
                 group by total_teacher_amount, total_institute_amount,total_fixed_institute_amount,student_fee_amount");
 
+        $count = DB::select("SELECT COUNT(student_teacher_share.monthly_payment_id) as no_of_payments, payment_name
+                                    FROM `student_teacher_share` GROUP BY payment_name");
+
         $result = [
             "records"=>$records,
-            "summary"=>$summary[0]
+            "summary"=>$summary[0],
+            "count"=>$count
         ];
 
         return $result;
@@ -341,9 +374,13 @@ class TeacherInstituteShareReport extends Service
                         SUM(amount) as student_fee_amount FROM student_teacher_share) B
                 group by total_teacher_amount, total_institute_amount,total_fixed_institute_amount,student_fee_amount");
 
+        $count = DB::select("SELECT COUNT(student_teacher_share.monthly_payment_id) as no_of_payments, payment_name
+                                    FROM `student_teacher_share` GROUP BY payment_name");
+
         $result = [
             "records"=>$records,
-            "summary"=>$summary[0]
+            "summary"=>$summary[0],
+            "count"=>$count
         ];
 
         return $result;
@@ -380,9 +417,13 @@ class TeacherInstituteShareReport extends Service
                         SUM(amount) as student_fee_amount FROM student_teacher_share) B
                 group by total_teacher_amount, total_institute_amount,total_fixed_institute_amount,student_fee_amount");
 
+        $count = DB::select("SELECT COUNT(student_teacher_share.monthly_payment_id) as no_of_payments, payment_name
+                                    FROM `student_teacher_share` GROUP BY payment_name");
+
         $result = [
             "records"=>$records,
-            "summary"=>$summary[0]
+            "summary"=>$summary[0],
+            "count"=>$count
         ];
 
         return $result;
@@ -416,9 +457,13 @@ class TeacherInstituteShareReport extends Service
                         SUM(amount) as student_fee_amount FROM student_teacher_share) B
                 group by total_teacher_amount, total_institute_amount,total_fixed_institute_amount,student_fee_amount");
 
+        $count = DB::select("SELECT COUNT(student_teacher_share.monthly_payment_id) as no_of_payments, payment_name
+                                    FROM `student_teacher_share` GROUP BY payment_name");
+
         $result = [
             "records"=>$records,
-            "summary"=>$summary[0]
+            "summary"=>$summary[0],
+            "count"=>$count
         ];
 
         return $result;
@@ -452,9 +497,13 @@ class TeacherInstituteShareReport extends Service
                         SUM(amount) as student_fee_amount FROM student_teacher_share) B
                 group by total_teacher_amount, total_institute_amount,total_fixed_institute_amount,student_fee_amount");
 
+        $count = DB::select("SELECT COUNT(student_teacher_share.monthly_payment_id) as no_of_payments, payment_name
+                                    FROM `student_teacher_share` GROUP BY payment_name");
+
         $result = [
             "records"=>$records,
-            "summary"=>$summary[0]
+            "summary"=>$summary[0],
+            "count"=>$count
         ];
 
         return $result;

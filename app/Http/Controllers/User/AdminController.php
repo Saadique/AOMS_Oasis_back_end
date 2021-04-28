@@ -10,6 +10,7 @@ use App\Student;
 use App\Teacher;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -44,8 +45,22 @@ class AdminController extends Controller
             "lecture_count"=>$lectureCount
         ];
 
-        return $countArray;
+        DB::statement("CREATE OR REPLACE VIEW student_lecture_detail AS SELECT lectures.id as student_id, lectures.name as lecture_name
+         FROM lecture_student INNER JOIN students ON students.id=lecture_student.student_id
+         INNER JOIN lectures ON lectures.id=lecture_student.lecture_id");
+
+        $student_lecture_count = DB::select("SELECT COUNT(student_id) as student_count, lecture_name FROM student_lecture_detail GROUP BY lecture_name");
+
+        $result = [
+            "counts" => $countArray,
+            "student_lecture_count" => $student_lecture_count
+        ];
+
+        return $result;
     }
+
+
+//CREATE OR REPLACE VIEW student_lecture_detail AS SELECT lectures.id as student_id, lectures.name as lecture_name FROM lecture_student INNER JOIN students ON students.id=lecture_student.student_id INNER JOIN lectures ON lectures.id=lecture_student.lecture_id
 
 
     public function store(Request $request)
