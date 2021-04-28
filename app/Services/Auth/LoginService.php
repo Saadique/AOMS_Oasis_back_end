@@ -52,9 +52,9 @@ class LoginService extends AuthService
                         $response["administrative_staff"] = AdministrativeStaff::where('user_id', $user->id)->first();
                         $this->changeStatusInDue();
                         break;
-//                    case 5:
-//                        $response["manager"] = Manager::where('user_id', $user->id)->first();
-//                        break;
+                    case 5:
+                        $response["manager"] = Manager::where('user_id', $user->id)->first();
+                        break;
                 }
 
                 return response($response, 200);
@@ -83,9 +83,9 @@ class LoginService extends AuthService
             if ($today<$monthlyPayment->due_date){
                 $monthlyPayment->status = "due";
                 $monthlyPayment->save();
-
             }
         }
+
     }
 
 }

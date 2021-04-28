@@ -28,7 +28,11 @@ class StudentService extends Service
     public function createStudent($requestBody) {
         $emailExists = Student::where('email', $requestBody['email'])->first();
         if ($emailExists) {
-            return response()->json("Email Already Exists", 400);
+            return response("Email Already Exists", 400);
+        }
+
+        if (empty($requestBody['lectures'])){
+            return response("Student Cannot Be Registered Without Lectures", 400);
         }
 
         $randomPassword = Str::random(8);

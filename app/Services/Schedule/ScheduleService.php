@@ -31,7 +31,7 @@ class ScheduleService extends Service
         }
 
         if ($teacherStartTimeMatch or $teacherEndTimeMatch) {
-            return $this->errorResponse("This teacher Has Another lecture at this schedule slot",400);
+            return $this->errorResponse("Selected Teacher Has Another Lecture at This Schedule slot",400);
         }
 
         //checks whether a schedule previously exists in the day and room the user requested
@@ -92,7 +92,7 @@ class ScheduleService extends Service
             }
             return $this->showOne($schedule);
         }
-        return $this->errorResponse("THIS_TIME_IS_NOT_FREE",400);
+        return $this->errorResponse("This Schedule Is Already Occupied By Another Lecture",400);
     }
 
 

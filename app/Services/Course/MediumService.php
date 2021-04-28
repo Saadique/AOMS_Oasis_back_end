@@ -17,7 +17,7 @@ class MediumService extends Service
 
         $existsShortName = Medium::where('short_name', $requestData['short_name'])->first();
         if ($existsShortName!=null) {
-            return $this->errorResponse("This short name for medium name already exists", 400);
+            return $this->errorResponse("This Short Name for Medium name already exists", 400);
         }
 
         $medium = Medium::create($requestData);
@@ -31,6 +31,22 @@ class MediumService extends Service
 
 
     public function updateMedium($requestBody, Medium $medium) {
+        $existsName = Medium::where([
+            ['name', $requestBody['name']],
+            ['id','!=',$medium->id]
+        ])->first();
+        if ($existsName!=null) {
+            return $this->errorResponse("This medium name already exists", 400);
+        }
+
+        $existsShortName = Medium::where([
+            ['id','!=',$medium->id],
+            ['short_name', $requestBody['short_name']]
+        ])->first();
+        if ($existsShortName!=null) {
+            return $this->errorResponse("This Short Name for Medium name already exists", 400);
+        }
+
         $medium->name = $requestBody['name'];
         $medium->short_name = $requestBody['short_name'];
         $medium->description = $requestBody['description'];

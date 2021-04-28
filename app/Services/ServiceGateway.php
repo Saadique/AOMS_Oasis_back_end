@@ -21,6 +21,7 @@ use App\Services\Schedule\ScheduleService;
 use App\Services\Student\StudentService;
 use App\Services\StudentPayments\StudentFeeReportsService;
 use App\Services\StudentPayments\StudentPaymentsService;
+use App\Services\StudentPayments\TeacherInstituteShareReport;
 use App\Services\StudentPayments\TeacherRemunerationReportService;
 use App\Services\StudentSchemeLecture\StudentSchemeLectureService;
 use App\Services\Subject\SubjectService;
@@ -53,6 +54,7 @@ class ServiceGateway
     public $userService;
     public $teacherRemunReportService;
     public $studentFeeReportService;
+    public $teacherInstituteShareReportService;
 
 
 
@@ -80,7 +82,8 @@ class ServiceGateway
         MediumService               $mediumService,
         UserService                 $userService,
         TeacherRemunerationReportService  $teacherReportService,
-        StudentFeeReportsService          $studentFeeReportService)
+        StudentFeeReportsService          $studentFeeReportService,
+        TeacherInstituteShareReport       $teacherInstituteShareReportService)
     {
         $this->courseService                 = $courseService;
         $this->scheduleService               = $scheduleService;
@@ -106,6 +109,7 @@ class ServiceGateway
         $this->userService                   = $userService;
         $this->teacherRemunReportService     = $teacherReportService;
         $this->studentFeeReportService       = $studentFeeReportService;
+        $this->teacherInstituteShareReportService = $teacherInstituteShareReportService;
     }
 
 }

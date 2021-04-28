@@ -29,7 +29,7 @@ class SubjectService extends Service
         return $this->showAll($subjects);
     }
 
-    public function updateSubject(Request $request, Subject $subject) {
+    public function updateSubject($request, Subject $subject) {
         $existingSubject = Subject::where([
             ['id','!=', $subject->id],
             ['course_medium_id',$request['course_medium_id']],
@@ -40,12 +40,11 @@ class SubjectService extends Service
             return $this->errorResponse("The Subject With Name ".$request['name']." Already Exists", 400);
         }
 
-        $updatedSubject              = Subject::findOrFail($subject->id);
-        $updatedSubject->name        = $request->name;
-        $updatedSubject->description = $request->description;
-        $updatedSubject->type        = $request->type;
+        $subject->name        = $request['name'];
+        $subject->description = $request['description'];
+        $subject->type        = $request['type'];
 
-        $updatedSubject->update();
-        return $this->showOne($updatedSubject);
+        $subject->save();
+        return $this->showOne($subject);
     }
 }

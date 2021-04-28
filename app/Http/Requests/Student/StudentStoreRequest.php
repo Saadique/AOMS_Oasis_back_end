@@ -24,8 +24,7 @@ class StudentStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>'required',
-            'lectures' => 'required'
+            'name'=>'required'
         ];
     }
 

@@ -1,10 +1,11 @@
 <?php
 
-
 namespace App\Services\DailySchedule;
 use App\Attendance;
 use App\DailySchedule;
 use App\Lecture;
+use App\Mail\ResetPasswordCode;
+use App\Mail\ScheduleNoti;
 use App\Mail\ScheduleNotification;
 use App\ScheduleNotifications;
 use App\Services\Service;
@@ -70,28 +71,25 @@ class DailyScheduleService extends Service
             $endTime     = $dailySchedule->end_time;
 
 
-            $messagea = "A new lecture schedule was created for $lectureName
+            $message = "A new lecture schedule was created for $lectureName
                         Room - $roomName.
                         Date - $date.
                         From - $startTime.
                         To   - $endTime.";
-
-            $message="sasa";
-
 
             $notification = new ScheduleNotifications();
             $notification->daily_schedule_id = $dailySchedule->id;
             $notification->action = "create";
             $notification->save();
 
-            Mail::to($teacher->email)->send(new ScheduleNotification($message));
+            Mail::to($teacher->email)->send(new ScheduleNoti($message));
 
             $studentEmails = DB::select("SELECT email from students where id IN
                             (SELECT student_id from lecture_student where lecture_id IN
                             (SELECT lecture_id from daily_schedules where id=$dailySchedule->id))");
 
             foreach ($studentEmails as $email){
-                Mail::to($email)->send(new ScheduleNotification($message));
+                Mail::to($email)->send(new ScheduleNoti($message));
             }
 
             return $this->showOne($dailySchedule);
@@ -210,27 +208,27 @@ class DailyScheduleService extends Service
                 $dailyScheduleUpdated = DailySchedule::findOrFail($dailySchedule->id);
 
                 $roomName = $dailyScheduleUpdated->room->name;
-                $messages = "The $lecture->name lecture on $oldDate, was updated to
+                $message = "The $lecture->name lecture on $oldDate, was updated to
                         Room - $roomName.
                         Date - $dailyScheduleUpdated->date.
                         From - $dailyScheduleUpdated->start_time.
                         To   - $dailyScheduleUpdated->end_time.";
 
-                $message="sasa";
+                $messages="sasa";
                 $notification = new ScheduleNotifications();
                 $notification->daily_schedule_id = $dailySchedule->id;
                 $notification->old_date = $oldDate;
                 $notification->action = "update";
                 $notification->save();
 
-                Mail::to($teacher->email)->send(new ScheduleNotification($message));
+                Mail::to($teacher->email)->send(new ScheduleNoti($message));
 
                 $studentEmails = DB::select("SELECT email from students where id IN
                             (SELECT student_id from lecture_student where lecture_id IN
                             (SELECT lecture_id from daily_schedules where id=$dailySchedule->id))");
 
                 foreach ($studentEmails as $email) {
-                    Mail::to($email)->send(new ScheduleNotification($message));
+                    Mail::to($email)->send(new ScheduleNoti($message));
                 }
                 return $this->showOne($dailySchedule);
             } else {

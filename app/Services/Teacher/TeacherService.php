@@ -54,8 +54,8 @@ class TeacherService extends Service
         $requestBody['user_id'] = $user->id;
         $teacher = Teacher::create($requestBody);
 
-        $user->initial_password = $randomPassword;
-        $user->save();
+//        $user->initial_password = $randomPassword;
+//        $user->save();
         $this->sendPasswordMail($requestBody['email'], $user->username, $randomPassword);
         return $this->showOne($teacher);
     }

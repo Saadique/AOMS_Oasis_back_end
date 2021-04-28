@@ -21,12 +21,32 @@ class LectureService extends Service
     }
 
     public function createLecture($requestBody) {
+        $nameExists = Lecture::where([
+            ['name',$requestBody['name']],
+            ['course_medium_id',$requestBody['course_medium_id']],
+            ['subject_id',$requestBody['subject_id']]
+        ])->first();
+
+        if ($nameExists){
+            return response("A Lecture With the same name already exists for the selected type,course and subject", 400);
+        }
         $lecture = Lecture::create($requestBody);
         $this->paymentService->createPayment($lecture,$requestBody);
         return $this->showOne($lecture);
     }
 
     public function updateLecture($request, Lecture $lecture) {
+        $nameExists = Lecture::where([
+            ['id','!=',$lecture->id],
+            ['name',$request['name']],
+            ['course_medium_id',$request['course_medium_id']],
+            ['subject_id',$request['subject_id']]
+        ])->first();
+
+        if ($nameExists){
+            return response("A Lecture With the same name already exists for the selected type,course and subject", 400);
+        }
+
         $lecture->name = $request['name'];
         $lecture->subject_id = $request['subject_id'];
         $lecture->type = $request['type'];
@@ -48,7 +68,10 @@ class LectureService extends Service
     }
 
     public function getAllLecturesBySubject($subjectId){
-        return Lecture::where('subject_id', $subjectId)->get();
+        return Lecture::where([
+            ['subject_id', $subjectId],
+            ['status', 'active']
+        ])->get();
     }
 
     public function findAllStudentsByLecture($lectureId) {

@@ -43,6 +43,7 @@ class SubjectController extends ApiController
 
     public function update(Request $request, Subject $subject)
     {
+        $request = $request->all();
         return $this->serviceGateway->subjectService->updateSubject($request, $subject);
     }
 

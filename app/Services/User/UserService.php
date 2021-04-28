@@ -53,7 +53,7 @@ class UserService extends Service
         $token = $user->createToken('Laravel Password Grant Client')->accessToken;
         $requestBody['user_id'] = $user->id;
 
-        $admin = Admin::create($requestBody);
+        $admin = AdministrativeStaff::create($requestBody);
         return $this->showOne($admin);
     }
 
@@ -97,9 +97,12 @@ class UserService extends Service
 
     public function suspendOrActivateAccount($status, $userId) {
         $user = User::findOrFail($userId);
-        if ($user->role_name == 'Admin'){
-            $activeAdmins = Admin::where('status', 'active')->get();
-            if ($activeAdmins->count()<2){
+        if ($user->role_name == 'Admin' and $status=='suspended'){
+            $activeAdmins = User::where([
+                ['status', 'active'],
+                ['role_name','Admin']
+            ])->get();
+            if ($activeAdmins->count()==1){
                 $response = ["message" => 'Only 1 Admin Account Exists. Therefore It cannot be SUSPENDED'];
                 return response($response, 400);
             }
