@@ -59,7 +59,7 @@ class LectureService extends Service
         return Lecture::where([
             ['course_medium_id', $courseMediumId],
             ['status', 'active']
-        ])->get();
+        ])->with('teacher','subject')->get();
 
     }
 

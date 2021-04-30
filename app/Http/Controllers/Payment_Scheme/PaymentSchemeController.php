@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Payment_Scheme;
 use App\Services\ServiceGateway;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentSchemeController extends Controller
 {
@@ -30,11 +31,13 @@ class PaymentSchemeController extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
         $requestBody = $request->all();
         return $this->serviceGateway->paymentSchemeService->createPaymentScheme($requestBody);
     }
 
     public function getRelevantScheme(Request $request) {
+        $user = Auth::user();
         $requestBody = $request->all();
         return $this->serviceGateway->paymentSchemeService->findRelevantSchema($requestBody);
     }

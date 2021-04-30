@@ -6,6 +6,7 @@ use App\Attendance;
 use App\Http\Controllers\ApiController;
 use App\Services\ServiceGateway;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends ApiController
 {
@@ -23,11 +24,13 @@ class AttendanceController extends ApiController
 
     public function store(Request $request)
     {
+        $user = Auth::user();
         $requestBody = $request->all();
         return $this->serviceGateway->attendanceService->markAttendance($requestBody);
     }
 
     public function getStudentsAttendancesOfLecture($lecture_id, $date) {
+        $user = Auth::user();
         return $this->serviceGateway->attendanceService->findStudentAttendancesOfLecture($lecture_id, $date);
     }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Payment;
 use App\Services\ServiceGateway;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends ApiController
 {
@@ -43,6 +44,7 @@ class PaymentController extends ApiController
     }
 
     public function getPaymentOfLecture($lectureId) {
+        $user = Auth::user();
         return $this->serviceGateway->paymentService->findPaymentOfLecture($lectureId);
     }
 
@@ -66,6 +68,7 @@ class PaymentController extends ApiController
 
     public function update(Request $request, Payment $payment)
     {
+        $user = Auth::user();
         $request = $request->all();
         $payment->student_fee = $request['student_fee'];
         $payment->fixed_institute_amount = $request['fixed_institute_amount'];

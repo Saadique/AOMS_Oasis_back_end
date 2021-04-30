@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\LectureLessons;
 use App\Services\ServiceGateway;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LectureLessonsController extends Controller
 {
@@ -31,11 +32,13 @@ class LectureLessonsController extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
         $requestBody = $request->all();
         return $this->serviceGateway->lectureLessonService->createLesson($requestBody);
     }
 
     public function getLessonsByLecture($lecture_id) {
+        $user = Auth::user();
         return $this->serviceGateway->lectureLessonService->getLessonsByLecture($lecture_id);
     }
 
@@ -54,6 +57,7 @@ class LectureLessonsController extends Controller
 
     public function update(Request $request, LectureLessons $lesson)
     {
+        $user = Auth::user();
         $existingLesson = LectureLessons::where([
             ['lecture_id', $request['lecture_id']],
             ['name',$request['name']],
@@ -71,6 +75,7 @@ class LectureLessonsController extends Controller
     }
 
     public function changeDeleteStatus($lesson_id, $status) {
+        $user = Auth::user();
         $lesson = LectureLessons::findOrFail($lesson_id);
         $lesson->status = $status;
         $lesson->save();

@@ -10,6 +10,7 @@ use App\Student;
 use App\Teacher;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
@@ -33,6 +34,7 @@ class AdminController extends Controller
     }
 
     public function getAdminDashboardData() {
+        $user = Auth::user();
         $activeStudentsCount = Student::where("status","active")->get()->count();
         $activeTeacherCount = Teacher::where("status","active")->get()->count();
         $userAccountsCount = User::where("status","active")->get()->count();
@@ -65,6 +67,7 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
         $requestBody = $request->all();
         return $this->serviceGateway->userService->createAdmin($requestBody);
     }
@@ -84,6 +87,7 @@ class AdminController extends Controller
 
     public function update(Request $request, Admin $admin)
     {
+        $user = Auth::user();
         $requestBody = $request->all();
         return $this->serviceGateway->userService->updateAdmin($requestBody, $admin);
     }

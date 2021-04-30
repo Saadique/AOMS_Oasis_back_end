@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\ScheduleNotifications;
 use App\Services\ServiceGateway;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleNotificationsController extends Controller
 {
@@ -18,10 +19,12 @@ class ScheduleNotificationsController extends Controller
     }
 
     public function getTeacherUptoDateNotifications($teacherId) {
+        $user = Auth::user();
         return $this->serviceGateway->scheduleNotificationService->findTeacherUptoDateNotifications($teacherId);
     }
 
     public function getStudentUptoDateNotifications($studentId) {
+        $user = Auth::user();
         return $this->serviceGateway->scheduleNotificationService->findStudentUptoDateNotifications($studentId);
     }
 

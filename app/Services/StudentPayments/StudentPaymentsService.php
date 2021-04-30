@@ -199,9 +199,4 @@ class StudentPaymentsService extends Service
             }
         }
     }
-
-
-
-
-
 }

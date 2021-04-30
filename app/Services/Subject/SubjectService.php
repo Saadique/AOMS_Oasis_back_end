@@ -25,9 +25,13 @@ class SubjectService extends Service
     }
 
     public function getAllSubjectsOfOneCourseMedium($courseMediumId) {
-        $subjects = Subject::where('course_medium_id',$courseMediumId)->get();
+        $subjects = Subject::where([
+            ['course_medium_id',$courseMediumId],
+            ['status','active']
+        ])->get();
         return $this->showAll($subjects);
     }
+
 
     public function updateSubject($request, Subject $subject) {
         $existingSubject = Subject::where([

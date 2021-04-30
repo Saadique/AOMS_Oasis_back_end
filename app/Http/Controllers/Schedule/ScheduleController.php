@@ -11,6 +11,7 @@ use App\Services\ServiceGateway;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use SebastianBergmann\Comparator\DateTimeComparator;
@@ -26,22 +27,26 @@ class ScheduleController extends ApiController
 
     public function index()
     {
+        $user = Auth::user();
         $schedules = $this->serviceGateway->scheduleService->getAllSchedules();
         return $this->showAll($schedules);
     }
 
     public function store(Request $request)
     {
+        $user = Auth::user();
         $validatedRequest = $request->all();
         return $this->serviceGateway->scheduleService->createSchedule($validatedRequest);
     }
 
     public function show(Schedule $schedule)
     {
+        $user = Auth::user();
         return $this->showOne($schedule);
     }
 
     public function getAllMatchingSchedules(Request $request) {
+        $user = Auth::user();
         $requestBody = $request->all();
         return $this->serviceGateway->scheduleService->findAllMatchingSchedules($requestBody);
     }
@@ -52,7 +57,7 @@ class ScheduleController extends ApiController
 
 
     public function findSchedule(Request $request) {
-
+        $user = Auth::user();
         $date = $request->input('date');
         $startTime = $request->input('startTime');
         $endTime = $request->input('endTime');

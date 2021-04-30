@@ -6,6 +6,7 @@ use App\AdministrativeStaff;
 use App\Http\Controllers\Controller;
 use App\Services\ServiceGateway;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdministrativeStaffController extends Controller
 {
@@ -29,6 +30,7 @@ class AdministrativeStaffController extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
         $requestBody = $request->all();
         return $this->serviceGateway->userService->createAdministrativeStaff($requestBody);
     }
@@ -45,6 +47,7 @@ class AdministrativeStaffController extends Controller
 
     public function update(Request $request, AdministrativeStaff $administrativeStaff)
     {
+        $user = Auth::user();
         $requestBody = $request->all();
         return $this->serviceGateway->userService->updateAdminStaff($requestBody,  $administrativeStaff);
     }

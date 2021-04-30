@@ -50,19 +50,27 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('mediums', 'Medium\MediumController', ['except' => ['create', 'edit']]);
     Route::get('mediums/all/mediums', 'Medium\MediumController@getAllMediums');
     Route::get('mediums/status/activate/{mediumId}', 'Medium\MediumController@activateMedium');
+
+    Route::resource('rooms', 'Room\RoomController', ['except' => ['create', 'edit']]);
+    Route::get('rooms/status/{roomId}/{status}', 'Room\RoomController@changeDeleteStatus');
+    Route::get('rooms/all/rooms','Room\RoomController@getActiveRooms');
+
+    Route::resource('lectures', 'Lecture\LectureController', ['except' => ['create', 'edit']]);
+    Route::resource('schedules', 'Schedule\ScheduleController', ['except' => ['create', 'edit']]);
+    Route::resource('attendances', 'Attendance\AttendanceController', ['except' => ['create', 'edit']]);
+
 });
 
 Route::resource('courses', 'Course\CourseController', ['except' => ['create', 'edit']]);
 Route::resource('subjects', 'Subject\SubjectController', ['except' => ['create', 'edit']]);
-Route::resource('lectures', 'Lecture\LectureController', ['except' => ['create', 'edit']]);
-Route::resource('schedules', 'Schedule\ScheduleController', ['except' => ['create', 'edit']]);
+
+
 Route::resource('views', 'View\ViewController', ['except' => ['create', 'edit']]);
 Route::resource('teachers', 'Teacher\TeacherController', ['except' => ['create', 'edit']]);
 Route::resource('admins', 'User\AdminController', ['except' => ['create', 'edit']]);
 Route::resource('administrative_staff', 'User\AdministrativeStaffController', ['except' => ['create', 'edit']]);
 
 Route::resource('course_mediums', 'Course\CourseMediumController', ['except' => ['create', 'edit']]);
-Route::resource('rooms', 'Room\RoomController', ['except' => ['create', 'edit']]);
 Route::resource('daily-schedules', 'DailySchedule\DailyScheduleController', ['except' => ['create', 'edit']]);
 Route::resource('students', 'Student\StudentController', ['except' => ['create', 'edit']]);
 Route::resource('payments', 'Payment\PaymentController', ['except' => ['create', 'edit']]);
@@ -71,7 +79,6 @@ Route::resource('payment-schemes', 'Payment_Scheme\PaymentSchemeController', ['e
 Route::resource('student-payments', 'StudentPayments\StudentPaymentController', ['except' => ['create', 'edit']]);
 Route::resource('student-scheme-lecture', 'StudentSchemeLecture\StudentSchemeLectureController', ['except' => ['create', 'edit']]);
 Route::resource('monthly-payments', 'StudentPayments\MonthlyPaymentController', ['except' => ['create', 'edit']]);
-Route::resource('attendances', 'Attendance\AttendanceController', ['except' => ['create', 'edit']]);
 Route::resource('lessons', 'Lecture\LectureLessonsController', ['except' => ['create', 'edit']]);
 Route::resource('lessons_materials', 'Lecture\LessonMaterialsController', ['except' => ['create', 'edit']]);
 
@@ -129,6 +136,12 @@ Route::post('students/lecture/add', 'Student\StudentController@addLecture');
 
 Route::post('students/lecture/remove', 'Student\StudentController@removeLecture');
 
+Route::get('students/{studentId}/deactivate', 'Student\StudentController@deactivateStudent');
+
+Route::get('students/course_medium/{courseMediumId}', 'Student\StudentController@getAllStudentsByCourseMedium');
+
+Route::get('students/level/{level}', 'Student\StudentController@getAllStudentsByLevel');
+
 Route::get('payment/student/{studentId}', 'Payment\PaymentStudentController@getPaymentsOfStudent');
 
 Route::get('views/children/all', 'View\ViewController@menu');
@@ -180,11 +193,14 @@ Route::get('schedules/notifications/teacher/{teacherId}', 'Schedule\ScheduleNoti
 //schedule notifications of student
 Route::get('schedules/notifications/student/{studentId}', 'Schedule\ScheduleNotificationsController@getStudentUptoDateNotifications');
 
-Route::get('rooms/status/{roomId}/{status}', 'Room\RoomController@changeDeleteStatus');
-Route::get('rooms/all/rooms','Room\RoomController@getActiveRooms');
+
 
 Route::get('lectures/status/{lectureId}/{status}', 'Lecture\LectureController@changeDeleteStatus');
 
+
+Route::get('subjects/status/{subjectId}/{status}', 'Subject\SubjectController@changeDeleteStatus');
+
+Route::get('subjects/all/course_medium/{courseMediumId}', 'Subject\SubjectController@getAllSubjectsByCM');
 
 
 //get attendances of lectures by date

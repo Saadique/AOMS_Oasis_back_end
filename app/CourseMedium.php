@@ -24,4 +24,6 @@ class CourseMedium extends Pivot
         return $this->belongsTo(Medium::class);
     }
 
+
+
 }

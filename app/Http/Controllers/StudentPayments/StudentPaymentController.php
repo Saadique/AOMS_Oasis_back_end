@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\ServiceGateway;
 use App\Student_Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StudentPaymentController extends Controller
 {
@@ -24,15 +25,18 @@ class StudentPaymentController extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
         $requestBody = $request->all();
         return $this->serviceGateway->studentPaymentsService->storeStudentPayments($requestBody);
     }
 
     public function getPaymentsOfStudent($studentId){
+        $user = Auth::user();
         return $this->serviceGateway->studentPaymentsService->findPaymentsOfStudent($studentId);
     }
 
     public function getAllStudentPayments($studentId){
+        $user = Auth::user();
         return $this->serviceGateway->studentPaymentsService->findAllPaymentsOfStudents($studentId);
     }
 

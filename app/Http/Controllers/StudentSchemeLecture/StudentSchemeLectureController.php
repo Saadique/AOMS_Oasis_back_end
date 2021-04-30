@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\ServiceGateway;
 use App\StudentSchemeLecture;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StudentSchemeLectureController extends Controller
 {
@@ -39,6 +40,7 @@ class StudentSchemeLectureController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
         $studentSchemeLecture = $request->all();
         $this->serviceGateway->studentSchemeLectureService->storeStudentSchemeLecture($studentSchemeLecture);
     }

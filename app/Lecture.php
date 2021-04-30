@@ -21,6 +21,10 @@ class Lecture extends Model
         return $this->belongsTo(Teacher::class);
     }
 
+    public function subject() {
+        return $this->belongsTo(Subject::class);
+    }
+
     public function schedules() {
         return $this->hasMany(Schedule::class);
     }

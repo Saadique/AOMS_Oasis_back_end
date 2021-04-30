@@ -28,6 +28,7 @@ class UserController extends Controller
     }
 
     public function menu($roleId) {
+        $user = Auth::user();
         return $this->serviceGateway->loginService->findAuthorizedViews($roleId);
     }
 
@@ -76,10 +77,12 @@ class UserController extends Controller
     }
 
     public function getAllUserInformationByRole($role) {
+        $user = Auth::user();
         return $this->serviceGateway->userService->findAllUserInformationByRole($role);
     }
 
     public function suspendOrActivateAccount($status, $userId) {
+        $user = Auth::user();
         return $this->serviceGateway->userService->suspendOrActivateAccount($status, $userId);
     }
 
