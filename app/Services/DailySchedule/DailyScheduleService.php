@@ -94,7 +94,7 @@ class DailyScheduleService extends Service
 
             return $this->showOne($dailySchedule);
         } else {
-            return $this->errorResponse("THIS_TIME_IS_NOT_FREE",400);
+            return $this->errorResponse("This Lecture Slot Is Not Free",400);
         }
     }
 
@@ -232,7 +232,7 @@ class DailyScheduleService extends Service
                 }
                 return $this->showOne($dailySchedule);
             } else {
-                return $this->errorResponse("THIS_TIME_IS_NOT_FREE", 400);
+                return $this->errorResponse("This Lecture Slot Is Not Free", 400);
             }
         } else {
             return response()->json("Cannot Update Completed Schedule", 400);

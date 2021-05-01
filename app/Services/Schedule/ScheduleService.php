@@ -2,6 +2,8 @@
 
 namespace App\Services\Schedule;
 use App\DailySchedule;
+use App\Lecture;
+use App\Payment;
 use App\Schedule;
 use App\Services\Service;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +14,6 @@ class ScheduleService extends Service
     {
         $day = $requestBody['day'];
         $teacher_id = $requestBody['teacher_id'];
-
 
         $existingTeacherSchedules = DB::select("SELECT * FROM schedules WHERE day='$day'
                              AND lecture_id IN (SELECT id FROM lectures WHERE teacher_id=$teacher_id)");
@@ -90,6 +91,7 @@ class ScheduleService extends Service
                 $lastUpdatedObj = new \DateTime($nextDate);
                 $plusSevenFromDate = $date_plus_conv;
             }
+            DB::statement("DELETE FROM lectures where id NOT IN(SELECT lecture_id FROM schedules)");
             return $this->showOne($schedule);
         }
         return $this->errorResponse("This Schedule Is Already Occupied By Another Lecture",400);

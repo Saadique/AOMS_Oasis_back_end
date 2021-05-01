@@ -59,6 +59,7 @@ class StudentService extends Service
 
         $user->initial_password = $randomPassword;
         $user->username = $student->registration_no;
+        $user->save();
         $this->sendPasswordMail($student->email, $student->registration_no, $randomPassword);
 
         return $this->showOne($student);

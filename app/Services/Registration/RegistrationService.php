@@ -12,9 +12,9 @@ class RegistrationService extends Service
         $year = date("Y");
         $level = "";
         if ($student->student_type == 'ordinary_level'){
-            $level = "O/L";
+            $level = "OL";
         }else{
-            $level = "A/L";
+            $level = "AL";
         }
 
         $number = sprintf('%03d',$student->id);

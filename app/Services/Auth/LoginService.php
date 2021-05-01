@@ -5,6 +5,7 @@ use App\Admin;
 use App\AdministrativeStaff;
 use App\MonthlyPayment;
 use App\Role;
+use App\Services\User\UserService;
 use App\Student;
 use App\Teacher;
 use App\User;
@@ -40,7 +41,6 @@ class LoginService extends AuthService
                 switch ($user->role_id){
                     case 1:
                         $response["admin"] = Admin::where('user_id', $user->id)->first();
-                        $this->changeStatusInDue();
                         break;
                     case 2:
                         $response["student"] = Student::where('user_id', $user->id)->first();
@@ -50,10 +50,6 @@ class LoginService extends AuthService
                         break;
                     case 4:
                         $response["administrative_staff"] = AdministrativeStaff::where('user_id', $user->id)->first();
-                        $this->changeStatusInDue();
-                        break;
-                    case 5:
-                        $response["manager"] = Manager::where('user_id', $user->id)->first();
                         break;
                 }
 
@@ -69,9 +65,7 @@ class LoginService extends AuthService
         }
     }
 
-    public function findAuthorizedViews($roleId) {
-        return $this->getAuthorizedViews($roleId);
-    }
+
 
     public function changeStatusInDue(){
         $today = Carbon::now();
@@ -87,5 +81,7 @@ class LoginService extends AuthService
         }
 
     }
+
+
 
 }

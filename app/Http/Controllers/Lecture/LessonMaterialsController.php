@@ -83,7 +83,7 @@ class LessonMaterialsController extends Controller
         ])->first();
 
         if ($exists != null){
-            return response()->json(['message' => 'FILE_WITH_SAME_NAME_EXISTS'], 400);
+            return response()->json(['message' => 'File With Same Name Already Exists!'], 400);
         }
 
         $lessonMaterial = LessonMaterials::findOrFail($lessonMaterialId);

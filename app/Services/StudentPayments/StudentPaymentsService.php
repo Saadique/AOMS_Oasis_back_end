@@ -37,7 +37,9 @@ class StudentPaymentsService extends Service
         if ($studentPayment) {
             $payment_start_date = $studentPayment->payment_start_date;
             $payment_end_date = $studentPayment->payment_end_date;
-            $count_month = $payment_start_date;
+//            $count_month = $payment_start_date;
+            $count_month = date("Y-m-d");
+//            $todayPHP = date("Y-m-d");
             while($count_month<=$payment_end_date){
                 $start_date_totime = strtotime($count_month);
                 $lastdate = date("Y-m-t", $start_date_totime);

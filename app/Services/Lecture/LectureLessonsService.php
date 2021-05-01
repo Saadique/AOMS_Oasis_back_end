@@ -32,7 +32,7 @@ class LectureLessonsService extends Service
     public function storeLessonMaterial(Request $request){
         $exists = LessonMaterials::where('file_name', $request->input('file_name'))->first();
         if ($exists != null){
-            return response()->json(['message' => 'FILE_WITH_SAME_NAME_EXISTS'], 400);
+            return response()->json(['message' => 'File With Same Name Already Exists!'], 400);
         }
 
         $file = $request->file('file');
