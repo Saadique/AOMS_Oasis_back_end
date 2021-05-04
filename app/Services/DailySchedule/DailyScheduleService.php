@@ -7,6 +7,7 @@ use App\Lecture;
 use App\Mail\ResetPasswordCode;
 use App\Mail\ScheduleNoti;
 use App\Mail\ScheduleNotification;
+use App\Room;
 use App\ScheduleNotifications;
 use App\Services\Service;
 use App\Student;
@@ -18,6 +19,18 @@ class DailyScheduleService extends Service
 {
     public function createOneTimeSchedule($requestBody)
     {
+        $room = Room::findOrFail($requestBody['room_id']);
+        $lectureId = $requestBody['lecture_id'];
+
+        $noOfStudentsInLecture = DB::select("SELECT COUNT(student_id) as student_count FROM lecture_student
+                            WHERE lecture_id=$lectureId");
+        $studentCount = $noOfStudentsInLecture[0];
+
+        //greater than no of seats
+        if ($studentCount->student_count > $room->no_of_seats){
+            return $this->errorResponse("This $room->name with capacity $room->no_of_seats Cannot Allocate $studentCount->student_count Students",400);
+        }
+
         $date = $requestBody['date'];
         $teacher = Lecture::findOrFail($requestBody['lecture_id'])->teacher;
 
@@ -38,7 +51,7 @@ class DailyScheduleService extends Service
         }
 
         if ($teacherStartTimeMatch or $teacherEndTimeMatch) {
-            return $this->errorResponse("This teacher Has Another lecture at this schedule slot",400);
+            return $this->errorResponse("This Teacher Has Another Lecture at this Schedule Slot",400);
         }
 
         $similarSchedules = DB::table('daily_schedules')
@@ -94,7 +107,7 @@ class DailyScheduleService extends Service
 
             return $this->showOne($dailySchedule);
         } else {
-            return $this->errorResponse("This Lecture Slot Is Not Free",400);
+            return $this->errorResponse("This Schedule Time Slot Is Already Occupied",400);
         }
     }
 
@@ -149,6 +162,18 @@ class DailyScheduleService extends Service
     public function updateSchedule($requestBody, DailySchedule $dailySchedule) {
 
         if ($dailySchedule->status != 'completed') {
+
+            $room = Room::findOrFail($requestBody['room_id']);
+            $lectureId = $requestBody['lecture_id'];
+
+            $noOfStudentsInLecture = DB::select("SELECT COUNT(student_id) as student_count FROM lecture_student
+                            WHERE lecture_id=$lectureId");
+            $studentCount = $noOfStudentsInLecture[0];
+
+            if ($studentCount->student_count>$room->no_of_seats){
+                return $this->errorResponse("This $room->name with capacity $room->no_of_seats Cannot Allocate $studentCount->student_count Students",400);
+            }
+
 
             $date = $requestBody['date'];
             $teacher = Lecture::findOrFail($requestBody['lecture_id'])->teacher;
@@ -232,7 +257,7 @@ class DailyScheduleService extends Service
                 }
                 return $this->showOne($dailySchedule);
             } else {
-                return $this->errorResponse("This Lecture Slot Is Not Free", 400);
+                return $this->errorResponse("This Schedule Time Slot Is Already Occupied", 400);
             }
         } else {
             return response()->json("Cannot Update Completed Schedule", 400);

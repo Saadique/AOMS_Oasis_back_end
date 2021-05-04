@@ -126,7 +126,8 @@ class TeacherService extends Service
 
     public function findMonthlyRemunerations($lectureId, $year, $month) {
         $lec_stud_assc2 = DB::statement("Create or replace view teacher_monthly_payments AS
-                                            select * from monthly_payments where year='$year' AND month='$month' AND student_payment_id IN
+                                            select * from monthly_payments where year='$year' AND month='$month' AND status!='deleted'
+                                             AND student_payment_id IN
                                             (select id from student__payments
                                             where payment_id =
                                             (Select id from payments

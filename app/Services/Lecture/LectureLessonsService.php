@@ -59,7 +59,7 @@ class LectureLessonsService extends Service
     }
 
     public function downloadFile($requestBody) {
-        return response()->download(public_path($requestBody['file_path']),'image');
+        return response()->download(public_path($requestBody['file_path']),'name');
     }
 
     public function findAllMaterialsWithLessons($lecture_id) {

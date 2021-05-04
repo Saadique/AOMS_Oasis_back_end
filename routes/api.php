@@ -59,6 +59,115 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('schedules', 'Schedule\ScheduleController', ['except' => ['create', 'edit']]);
     Route::resource('attendances', 'Attendance\AttendanceController', ['except' => ['create', 'edit']]);
 
+
+    //=======================Student Report Apis===========================//
+
+
+//all records - all time
+    Route::get('reports/student_fee/all', 'ReportController@getAllStudentFeeRecords');
+
+//all records - month
+    Route::get('reports/student_fee/all/year/{year}/month/{month}', 'ReportController@getAllStudentFeeRecordsByMonth');
+
+//all records - date
+    Route::get('reports/student_fee/all/from/{fromDate}/to/{toDate}', 'ReportController@getAllStudentFeeRecordsByDate');
+
+
+
+//records by course - all_time
+    Route::get('reports/student_fee/course/{courseId}', 'ReportController@getAllStudentFeeRecordByCourse');
+
+//records by course - month
+    Route::get('reports/student_fee/course/{courseId}/year/{year}/month/{month}', 'ReportController@getAllStudentFeeRecordForCourseByMonth');
+
+//records by course - date
+    Route::get('reports/student_fee/course/{courseId}/from/{from_date}/to/{to_date}', 'ReportController@getAllStudentFeeRecordForCourseByDate');
+
+
+
+//records by teacher - all_time
+    Route::get('reports/student_fee/teacher/{teacherId}', 'ReportController@getAllStudentFeeRecordByTeacher');
+
+//records by teacher - month
+    Route::get('reports/student_fee/teacher/{teacherId}/year/{year}/month/{month}', 'ReportController@getAllStudentFeeRecordForTeacherByMonth');
+
+//records by teacher - date
+    Route::get('reports/student_fee/teacher/{teacherId}/from/{from_date}/to/{to_date}', 'ReportController@getAllStudentFeeRecordForTeacherByDate');
+
+
+//records by lecture - all_time
+    Route::get('reports/student_fee/lecture/{lectureId}', 'ReportController@getAllStudentFeeRecordByLecture');
+
+//records by lecture - month
+    Route::get('reports/student_fee/lecture/{lectureId}/year/{year}/month/{month}', 'ReportController@getAllStudentFeeRecordForLectureByMonth');
+
+//records by lecture - date
+    Route::get('reports/student_fee/lecture/{lectureId}/from/{from_date}/to/{to_date}', 'ReportController@getAllStudentFeeRecordForLectureByDate');
+
+
+
+//=========================Teacher Report Apis=============================//
+
+//all
+    Route::get('reports/teacher_remun/all', 'ReportController@getRemunerationsPaidForTeachers');
+
+
+//by teacher
+    Route::get('reports/teacher_remun/teacher/{teacherId}', 'ReportController@getRemunerationsPaidForTeachersByTeacher');
+
+//by lecture
+    Route::get('reports/teacher_remun/lecture/{lectureId}', 'ReportController@getRemunerationsPaidForTeachersByLecture');
+
+//by teacher
+    Route::get('reports/teacher_remun/course/{courseId}', 'ReportController@getRemunerationsPaidForTeachersByCourse');
+
+
+
+
+//=======================Teacher Institute Share Report Apis===========================//
+
+
+//all records - all time
+    Route::get('reports/share/all', 'ReportController@getAllShareRecords');
+
+//all records - month
+    Route::get('reports/share/all/year/{year}/month/{month}', 'ReportController@getAllShareRecordsByMonth');
+
+//all records - date
+    Route::get('reports/share/all/from/{fromDate}/to/{toDate}', 'ReportController@getAllShareRecordsByDate');
+
+
+
+//records by course - all_time
+    Route::get('reports/share/course/{courseId}', 'ReportController@getAllShareRecordsByCourse');
+
+//records by course - month
+    Route::get('reports/share/course/{courseId}/year/{year}/month/{month}', 'ReportController@getAllShareRecordsForCourseByMonth');
+
+//records by course - date
+    Route::get('reports/share/course/{courseId}/from/{from_date}/to/{to_date}', 'ReportController@getAllShareRecordsForCourseByDate');
+
+
+
+//records by teacher - all_time
+    Route::get('reports/share/teacher/{teacherId}', 'ReportController@getAllShareRecordsByTeacher');
+
+//records by teacher - month
+    Route::get('reports/share/teacher/{teacherId}/year/{year}/month/{month}', 'ReportController@getAllShareRecordsForTeacherByMonth');
+
+//records by teacher - date
+    Route::get('reports/share/teacher/{teacherId}/from/{from_date}/to/{to_date}', 'ReportController@getAllShareRecordsForTeacherByDate');
+
+
+//records by lecture - all_time
+    Route::get('reports/share/lecture/{lectureId}', 'ReportController@getAllShareRecordsByLecture');
+
+//records by lecture - month
+    Route::get('reports/share/lecture/{lectureId}/year/{year}/month/{month}', 'ReportController@getAllShareRecordsForLectureByMonth');
+
+//records by lecture - date
+    Route::get('reports/share/lecture/{lectureId}/from/{from_date}/to/{to_date}', 'ReportController@getAllShareRecordsForLectureByDate');
+
 });
 
 Route::resource('courses', 'Course\CourseController', ['except' => ['create', 'edit']]);
@@ -239,113 +348,11 @@ Route::get('users/status/{status}/{userId}', 'User\UserController@suspendOrActiv
 //test mail
 Route::get('test/email','MailController@sendEmail');
 
-//=======================Student Report Apis===========================//
-
-
-//all records - all time
-Route::get('reports/student_fee/all', 'ReportController@getAllStudentFeeRecords');
-
-//all records - month
-Route::get('reports/student_fee/all/year/{year}/month/{month}', 'ReportController@getAllStudentFeeRecordsByMonth');
-
-//all records - date
-Route::get('reports/student_fee/all/from/{fromDate}/to/{toDate}', 'ReportController@getAllStudentFeeRecordsByDate');
 
 
 
-//records by course - all_time
-Route::get('reports/student_fee/course/{courseId}', 'ReportController@getAllStudentFeeRecordByCourse');
-
-//records by course - month
-Route::get('reports/student_fee/course/{courseId}/year/{year}/month/{month}', 'ReportController@getAllStudentFeeRecordForCourseByMonth');
-
-//records by course - date
-Route::get('reports/student_fee/course/{courseId}/from/{from_date}/to/{to_date}', 'ReportController@getAllStudentFeeRecordForCourseByDate');
-
-
-
-//records by teacher - all_time
-Route::get('reports/student_fee/teacher/{teacherId}', 'ReportController@getAllStudentFeeRecordByTeacher');
-
-//records by teacher - month
-Route::get('reports/student_fee/teacher/{teacherId}/year/{year}/month/{month}', 'ReportController@getAllStudentFeeRecordForTeacherByMonth');
-
-//records by teacher - date
-Route::get('reports/student_fee/teacher/{teacherId}/from/{from_date}/to/{to_date}', 'ReportController@getAllStudentFeeRecordForTeacherByDate');
-
-
-//records by lecture - all_time
-Route::get('reports/student_fee/lecture/{lectureId}', 'ReportController@getAllStudentFeeRecordByLecture');
-
-//records by lecture - month
-Route::get('reports/student_fee/lecture/{lectureId}/year/{year}/month/{month}', 'ReportController@getAllStudentFeeRecordForLectureByMonth');
-
-//records by lecture - date
-Route::get('reports/student_fee/lecture/{lectureId}/from/{from_date}/to/{to_date}', 'ReportController@getAllStudentFeeRecordForLectureByDate');
-
-
-
-//=========================Teacher Report Apis=============================//
-
-//all
-Route::get('reports/teacher_remun/all', 'ReportController@getRemunerationsPaidForTeachers');
-
-
-//by teacher
-Route::get('reports/teacher_remun/teacher/{teacherId}', 'ReportController@getRemunerationsPaidForTeachersByTeacher');
-
-//by lecture
-Route::get('reports/teacher_remun/lecture/{lectureId}', 'ReportController@getRemunerationsPaidForTeachersByLecture');
-
-//by teacher
-Route::get('reports/teacher_remun/course/{courseId}', 'ReportController@getRemunerationsPaidForTeachersByCourse');
 
 
 
 //dashboard data
 Route::get('admins/dashboard/data', 'User\AdminController@getAdminDashboardData');
-
-
-//=======================Teacher Institute Share Report Apis===========================//
-
-
-//all records - all time
-Route::get('reports/share/all', 'ReportController@getAllShareRecords');
-
-//all records - month
-Route::get('reports/share/all/year/{year}/month/{month}', 'ReportController@getAllShareRecordsByMonth');
-
-//all records - date
-Route::get('reports/share/all/from/{fromDate}/to/{toDate}', 'ReportController@getAllShareRecordsByDate');
-
-
-
-//records by course - all_time
-Route::get('reports/share/course/{courseId}', 'ReportController@getAllShareRecordsByCourse');
-
-//records by course - month
-Route::get('reports/share/course/{courseId}/year/{year}/month/{month}', 'ReportController@getAllShareRecordsForCourseByMonth');
-
-//records by course - date
-Route::get('reports/share/course/{courseId}/from/{from_date}/to/{to_date}', 'ReportController@getAllShareRecordsForCourseByDate');
-
-
-
-//records by teacher - all_time
-Route::get('reports/share/teacher/{teacherId}', 'ReportController@getAllShareRecordsByTeacher');
-
-//records by teacher - month
-Route::get('reports/share/teacher/{teacherId}/year/{year}/month/{month}', 'ReportController@getAllShareRecordsForTeacherByMonth');
-
-//records by teacher - date
-Route::get('reports/share/teacher/{teacherId}/from/{from_date}/to/{to_date}', 'ReportController@getAllShareRecordsForTeacherByDate');
-
-
-//records by lecture - all_time
-Route::get('reports/share/lecture/{lectureId}', 'ReportController@getAllShareRecordsByLecture');
-
-//records by lecture - month
-Route::get('reports/share/lecture/{lectureId}/year/{year}/month/{month}', 'ReportController@getAllShareRecordsForLectureByMonth');
-
-//records by lecture - date
-Route::get('reports/share/lecture/{lectureId}/from/{from_date}/to/{to_date}', 'ReportController@getAllShareRecordsForLectureByDate');

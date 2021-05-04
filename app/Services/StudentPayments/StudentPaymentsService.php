@@ -159,30 +159,30 @@ class StudentPaymentsService extends Service
             $teacherInstituteShare->save();
         }
 
-        if ($studentPayment->payment_type == "scheme") {
-            $paymentScheme = $studentPayment->paymentScheme;
-            $stuLecSchemes = StudentSchemeLecture::where([
-                ['student_id', $monthlyPayment->student_id]
-            ])->get();
-            foreach ($stuLecSchemes as $stuLecScheme) {
-                $lecture = $stuLecScheme->lecture;
-                $payment = $lecture->payment;
-                $teacher = $lecture->teacher;
-
-                $shareAmount = $payedAmount - $paymentScheme->fixed_institute_amount;
-                $singleShare = $shareAmount / $paymentScheme->no_of_subjects;
-                $teacherAmount = $singleShare * ($payment->teacher_percentage/100);
-                $teacherInstituteShare = new TeacherInstituteShare();
-                $teacherInstituteShare->monthly_payment_id = $monthlyPayment->id;
-                $teacherInstituteShare->teacher_id = $teacher->id;
-                $teacherInstituteShare->student_payment_id = $studentPayment->id;
-                $teacherInstituteShare->lecture_id = $lecture->id;
-                $teacherInstituteShare->status = "to_settle";
-                $teacherInstituteShare->teacher_amount = $teacherAmount;
-                $teacherInstituteShare->institute_amount = $singleShare - $teacherAmount;
-                $teacherInstituteShare->save();
-            }
-        }
+//        if ($studentPayment->payment_type == "scheme") {
+//            $paymentScheme = $studentPayment->paymentScheme;
+//            $stuLecSchemes = StudentSchemeLecture::where([
+//                ['student_id', $monthlyPayment->student_id]
+//            ])->get();
+//            foreach ($stuLecSchemes as $stuLecScheme) {
+//                $lecture = $stuLecScheme->lecture;
+//                $payment = $lecture->payment;
+//                $teacher = $lecture->teacher;
+//
+//                $shareAmount = $payedAmount - $paymentScheme->fixed_institute_amount;
+//                $singleShare = $shareAmount / $paymentScheme->no_of_subjects;
+//                $teacherAmount = $singleShare * ($payment->teacher_percentage/100);
+//                $teacherInstituteShare = new TeacherInstituteShare();
+//                $teacherInstituteShare->monthly_payment_id = $monthlyPayment->id;
+//                $teacherInstituteShare->teacher_id = $teacher->id;
+//                $teacherInstituteShare->student_payment_id = $studentPayment->id;
+//                $teacherInstituteShare->lecture_id = $lecture->id;
+//                $teacherInstituteShare->status = "to_settle";
+//                $teacherInstituteShare->teacher_amount = $teacherAmount;
+//                $teacherInstituteShare->institute_amount = $singleShare - $teacherAmount;
+//                $teacherInstituteShare->save();
+//            }
+//        }
 
         return $monthlyPayment;
     }

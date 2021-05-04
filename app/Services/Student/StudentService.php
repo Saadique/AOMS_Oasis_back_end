@@ -125,7 +125,7 @@ class StudentService extends Service
                         student_id=$studentId AND payment_id=$payment->id");
 
 
-            DB::update("UPDATE monthly_payments SET delete_status='deleted' WHERE
+            DB::update("UPDATE monthly_payments SET delete_status='deleted' and status='deleted' WHERE
                         student_payment_id=$studentPayment->id AND status='active'");
 
             $lec_stud_assc = DB::table('lecture_student')->where([
